@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { DRRNode, DRREngineState, AudioConfig, CreativeFlowState, IntuitiveForesightState, Focus15State, AtemporalEvent } from '../types/focus';
 
@@ -60,6 +59,20 @@ const DRREngine: React.FC<DRREngineProps> = ({
       recursiveSigils: []
     },
     atemporalEvents: []
+  });
+
+  const [creativeFlow, setCreativeFlow] = useState<CreativeFlowState>({
+    enabled: false,
+    dissonanceLevel: 0,
+    rhythmicInjections: false,
+    nextInjectionTime: 0
+  });
+
+  const [intuitiveForesight, setIntuitiveForesight] = useState<IntuitiveForesightState>({
+    enabled: false,
+    spiralIntensity: 0,
+    convergenceDetected: false,
+    goldenSpiralNodes: []
   });
 
   const initializeAudioContext = useCallback(async () => {
@@ -503,7 +516,7 @@ const DRREngine: React.FC<DRREngineProps> = ({
       calculateSpectralPhaseStability, calculateVibrationalCoherence, 
       calculateGoldenRatioAlignment, extractDominantFrequencies, generateResonanceNodes, 
       onDRRStateUpdate, onResonanceUpdate, onAudioConfigUpdate, onFocus15StateUpdate,
-      updateCreativeFlow, updateIntuitiveForesight]);
+      updateCreativeFlow, updateIntuitiveForesight, creativeFlow.nextInjectionTime]);
 
   useEffect(() => {
     if (isActive && micEnabled) {
