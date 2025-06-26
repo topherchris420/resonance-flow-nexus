@@ -1,9 +1,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import CymaticCanvas from '../components/CymaticCanvas';
-import FocusControls from '../components/FocusControls';
 import AudioEngine from '../components/AudioEngine';
 import DRREngine from '../components/DRREngine';
+import Header from '../components/Header';
+import ResponsiveLayout from '../components/ResponsiveLayout';
+import MobileControls from '../components/MobileControls';
+import DesktopSidebar from '../components/DesktopSidebar';
 import { FocusState, DRRNode, DRREngineState, AudioConfig, CreativeFlowState, IntuitiveForesightState, SessionLogEntry } from '../types/focus';
 
 const Index = () => {
@@ -105,8 +108,11 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
-      <div className="relative w-full h-screen">
+    <ResponsiveLayout>
+      <Header />
+      
+      {/* Main Content Area */}
+      <div className="pt-16 pb-20 sm:pb-0 sm:pr-80 flex-1 relative">
         {/* Enhanced Cymatic Canvas with DRR visualization */}
         <CymaticCanvas 
           resonanceNodes={resonanceNodes}
@@ -141,23 +147,32 @@ const Index = () => {
           onFocusTransition={handleFocusTransition}
           onBreathCoherenceUpdate={setBreathCoherence}
         />
-        
-        {/* Enhanced Controls with DRR metrics */}
-        <FocusControls
-          focusState={focusState}
-          isActive={isActive}
-          micEnabled={micEnabled}
-          sessionLog={sessionLog}
-          breathCoherence={breathCoherence}
-          drrState={drrState}
-          creativeFlowState={creativeFlowState}
-          intuitiveForesightState={intuitiveForesightState}
-          onToggleSession={toggleSession}
-          onToggleMicrophone={toggleMicrophone}
-          onFocusTransition={handleFocusTransition}
-        />
       </div>
-    </div>
+      
+      {/* Mobile Controls */}
+      <MobileControls
+        focusState={focusState}
+        isActive={isActive}
+        micEnabled={micEnabled}
+        onToggleSession={toggleSession}
+        onToggleMicrophone={toggleMicrophone}
+        onFocusTransition={handleFocusTransition}
+      />
+      
+      {/* Desktop Sidebar */}
+      <DesktopSidebar
+        focusState={focusState}
+        isActive={isActive}
+        micEnabled={micEnabled}
+        breathCoherence={breathCoherence}
+        drrState={drrState}
+        creativeFlowState={creativeFlowState}
+        intuitiveForesightState={intuitiveForesightState}
+        onToggleSession={toggleSession}
+        onToggleMicrophone={toggleMicrophone}
+        onFocusTransition={handleFocusTransition}
+      />
+    </ResponsiveLayout>
   );
 };
 
