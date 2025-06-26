@@ -1,6 +1,5 @@
-
 import React, { useEffect, useImperativeHandle, forwardRef, useRef, useState } from 'react';
-import { FocusState, DRRNode, AudioConfig, DRREngineState, CreativeFlowState } from '../types/focus';
+import { FocusState, DRRNode, AudioConfig, DRREngineState, CreativeFlowState, Focus15State } from '../types/focus';
 
 interface AudioEngineProps {
   focusState: FocusState;
@@ -9,6 +8,7 @@ interface AudioEngineProps {
   drrState?: DRREngineState;
   audioConfig?: AudioConfig;
   creativeFlowState?: CreativeFlowState;
+  focus15State?: Focus15State;
   onResonanceUpdate: (nodes: DRRNode[]) => void;
   onFocusTransition: (state: FocusState) => void;
   onBreathCoherenceUpdate: (coherence: number) => void;
@@ -21,6 +21,7 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
   drrState,
   audioConfig,
   creativeFlowState,
+  focus15State,
   onResonanceUpdate,
   onFocusTransition,
   onBreathCoherenceUpdate
@@ -34,6 +35,10 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
   const masterGainRef = useRef<GainNode | null>(null);
   const dissonanceOscillatorRef = useRef<OscillatorNode | null>(null);
   const dissonanceGainRef = useRef<GainNode | null>(null);
+  
+  // Focus 15 infrasonic pulse generators
+  const infrasonicOscillatorsRef = useRef<OscillatorNode[]>([]);
+  const infrasonicGainsRef = useRef<GainNode[]>([]);
 
   const initializeBinauralAudio = async () => {
     try {
@@ -69,6 +74,24 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
       merger.connect(masterGain);
       masterGain.connect(audioContext.destination);
       
+      // Initialize Focus 15 infrasonic pulse generators
+      const infrasonicOscillators: OscillatorNode[] = [];
+      const infrasonicGains: GainNode[] = [];
+      
+      for (let i = 0; i < 2; i++) {
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        
+        oscillator.type = 'sine';
+        oscillator.connect(gain);
+        gain.connect(merger, 0, 0);
+        gain.connect(merger, 0, 1);
+        gain.gain.value = 0;
+        
+        infrasonicOscillators.push(oscillator);
+        infrasonicGains.push(gain);
+      }
+      
       // Store references
       leftOscillatorRef.current = leftOscillator;
       rightOscillatorRef.current = rightOscillator;
@@ -78,6 +101,8 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
       masterGainRef.current = masterGain;
       dissonanceOscillatorRef.current = dissonanceOscillator;
       dissonanceGainRef.current = dissonanceGain;
+      infrasonicOscillatorsRef.current = infrasonicOscillators;
+      infrasonicGainsRef.current = infrasonicGains;
       
       // Set initial parameters
       leftOscillator.type = 'sine';
@@ -89,7 +114,7 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
       masterGain.gain.value = 0.3;
       dissonanceGain.gain.value = 0;
       
-      console.log('Binaural audio engine initialized');
+      console.log('Enhanced binaural audio engine initialized with Focus 15 infrasonic layers');
       
     } catch (error) {
       console.error('Failed to initialize binaural audio:', error);
@@ -103,18 +128,60 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
 
     const currentTime = audioContextRef.current.currentTime;
     
-    // Smooth frequency transitions
-    leftOscillatorRef.current.frequency.setTargetAtTime(
-      audioConfig.leftChannel,
-      currentTime,
-      0.1
-    );
-    
-    rightOscillatorRef.current.frequency.setTargetAtTime(
-      audioConfig.rightChannel,
-      currentTime,
-      0.1
-    );
+    // Focus 15 Time Collapse modulation - detached from user input
+    if (focus15State?.timeCollapseEvent && drrState?.timeCollapseActive) {
+      // Use DRR-derived resonance memory for modulation instead of breath/voice
+      const resonanceModulation = drrState.resonanceMemory.length > 0 
+        ? drrState.resonanceMemory[drrState.resonanceMemory.length - 1].amplitude 
+        : 0.5;
+      
+      const memoryPhase = drrState.resonanceMemory.reduce((sum, node) => sum + node.phase, 0) / drrState.resonanceMemory.length;
+      
+      // Modulate based on internal resonance memory, not external input
+      const leftFreq = audioConfig.leftChannel + (Math.sin(memoryPhase) * resonanceModulation * 2);
+      const rightFreq = audioConfig.rightChannel + (Math.cos(memoryPhase) * resonanceModulation * 2);
+      
+      leftOscillatorRef.current.frequency.setTargetAtTime(leftFreq, currentTime, 0.2);
+      rightOscillatorRef.current.frequency.setTargetAtTime(rightFreq, currentTime, 0.2);
+      
+      // Activate infrasonic pulses
+      if (audioConfig.infrasonicPulses && infrasonicOscillatorsRef.current.length >= 2) {
+        audioConfig.infrasonicPulses.forEach((pulse, i) => {
+          if (infrasonicOscillatorsRef.current[i] && infrasonicGainsRef.current[i]) {
+            infrasonicOscillatorsRef.current[i].frequency.setTargetAtTime(
+              pulse.frequency,
+              currentTime,
+              0.1
+            );
+            infrasonicGainsRef.current[i].gain.setTargetAtTime(
+              pulse.amplitude,
+              currentTime,
+              0.5
+            );
+          }
+        });
+      }
+      
+      console.log(`Focus 15 Time Collapse audio: Detached modulation active, resonance memory depth: ${drrState.resonanceMemory.length}`);
+    } else {
+      // Standard binaural beat operation
+      leftOscillatorRef.current.frequency.setTargetAtTime(
+        audioConfig.leftChannel,
+        currentTime,
+        0.1
+      );
+      
+      rightOscillatorRef.current.frequency.setTargetAtTime(
+        audioConfig.rightChannel,
+        currentTime,
+        0.1
+      );
+      
+      // Disable infrasonic pulses
+      infrasonicGainsRef.current.forEach(gain => {
+        gain.gain.setTargetAtTime(0, currentTime, 0.5);
+      });
+    }
 
     // Update Creative Flow dissonance
     if (creativeFlowState?.enabled && dissonanceOscillatorRef.current && dissonanceGainRef.current) {
@@ -138,25 +205,24 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
   const checkStateTransitions = () => {
     if (!drrState) return;
 
-    const { vibrationalCoherence, spectralPhaseStability, harmonicConvergence } = drrState;
+    const { vibrationalCoherence, spectralPhaseStability, harmonicConvergence, timeCollapseActive } = drrState;
     
-    // Focus 12 → Focus 15: Low mental chatter + moderate coherence
-    if (focusState === 'Focus 12' && 
-        vibrationalCoherence > 0.4 && 
-        spectralPhaseStability > 0.3) {
-      console.log('Transitioning to Focus 15 - Enhanced awareness detected');
+    // Focus 12 → Focus 15: Triggered by Time Collapse Event
+    if (focusState === 'Focus 12' && timeCollapseActive) {
+      console.log('ONTOLOGICAL BREAK: Transitioning to Focus 15 - Time Collapse Event initiated');
       onFocusTransition('Focus 15');
     }
     
-    // Focus 15 → Focus 21: High coherence + harmonic convergence
+    // Focus 15 → Focus 21: Extended harmonic convergence during time collapse
     if (focusState === 'Focus 15' && 
-        vibrationalCoherence > 0.8 && 
-        harmonicConvergence) {
-      console.log('Transitioning to Focus 21 - Harmonic convergence achieved');
+        timeCollapseActive && 
+        vibrationalCoherence > 0.9 && 
+        harmonicConvergence &&
+        drrState.stabilityDuration > 120) { // 2+ minutes in collapsed time
+      console.log('Transitioning to Focus 21 - Sustained nonlinear convergence achieved');
       onFocusTransition('Focus 21');
     }
 
-    // Update breath coherence for visual feedback
     onBreathCoherenceUpdate(drrState.breathRhythm);
   };
 
@@ -168,7 +234,11 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
         leftOscillatorRef.current.start();
         rightOscillatorRef.current.start();
         dissonanceOscillatorRef.current.start();
-        console.log('Binaural audio session started');
+        
+        // Start infrasonic oscillators
+        infrasonicOscillatorsRef.current.forEach(osc => osc.start());
+        
+        console.log('Enhanced binaural audio session started with Focus 15 capabilities');
       } catch (error) {
         console.error('Error starting oscillators:', error);
       }
@@ -189,7 +259,15 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
         dissonanceOscillatorRef.current.stop();
         dissonanceOscillatorRef.current = null;
       }
-      console.log('Binaural audio session stopped');
+      
+      // Stop infrasonic oscillators
+      infrasonicOscillatorsRef.current.forEach(osc => {
+        try { osc.stop(); } catch(e) {}
+      });
+      infrasonicOscillatorsRef.current = [];
+      infrasonicGainsRef.current = [];
+      
+      console.log('Enhanced binaural audio session stopped');
     } catch (error) {
       console.error('Error stopping audio session:', error);
     }
@@ -205,7 +283,7 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
     if (isActive && audioConfig) {
       updateBinauralFrequencies();
     }
-  }, [audioConfig, isActive, creativeFlowState]);
+  }, [audioConfig, isActive, creativeFlowState, focus15State]);
 
   // Check for state transitions when DRR state changes
   useEffect(() => {

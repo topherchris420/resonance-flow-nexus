@@ -1,6 +1,5 @@
-
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { DRRNode, DRREngineState, AudioConfig, CreativeFlowState, IntuitiveForesightState } from '../types/focus';
+import { DRRNode, DRREngineState, AudioConfig, CreativeFlowState, IntuitiveForesightState, Focus15State, AtemporalEvent } from '../types/focus';
 
 interface DRREngineProps {
   isActive: boolean;
@@ -10,6 +9,7 @@ interface DRREngineProps {
   onAudioConfigUpdate: (config: AudioConfig) => void;
   onCreativeFlowUpdate: (state: CreativeFlowState) => void;
   onIntuitiveForesightUpdate: (state: IntuitiveForesightState) => void;
+  onFocus15StateUpdate: (state: Focus15State) => void;
 }
 
 const DRREngine: React.FC<DRREngineProps> = ({
@@ -19,7 +19,8 @@ const DRREngine: React.FC<DRREngineProps> = ({
   onResonanceUpdate,
   onAudioConfigUpdate,
   onCreativeFlowUpdate,
-  onIntuitiveForesightUpdate
+  onIntuitiveForesightUpdate,
+  onFocus15StateUpdate
 }) => {
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -29,6 +30,9 @@ const DRREngine: React.FC<DRREngineProps> = ({
   const lastUpdateRef = useRef<number>(0);
   const amplitudeHistoryRef = useRef<number[]>([]);
   const frequencyHistoryRef = useRef<number[][]>([]);
+  const varianceHistoryRef = useRef<number[]>([]);
+  const stabilityStartTimeRef = useRef<number | null>(null);
+  const sessionSymbolsRef = useRef<Array<{id: string, timestamp: number, pattern: any}>>([]);
   
   const [drrState, setDrrState] = useState<DRREngineState>({
     isActive: false,
@@ -39,26 +43,31 @@ const DRREngine: React.FC<DRREngineProps> = ({
     breathRhythm: 0,
     amplitudeVariance: 0,
     harmonicConvergence: false,
-    goldenRatioAlignment: 0
+    goldenRatioAlignment: 0,
+    varianceHistory: [],
+    timeCollapseActive: false,
+    resonanceMemory: [],
+    stabilityDuration: 0
   });
 
-  const [creativeFlow, setCreativeFlow] = useState<CreativeFlowState>({
-    enabled: false,
-    dissonanceLevel: 0,
-    rhythmicInjections: false,
-    nextInjectionTime: 0
-  });
-
-  const [intuitiveForesight, setIntuitiveForesight] = useState<IntuitiveForesightState>({
-    enabled: false,
-    spiralIntensity: 0,
-    convergenceDetected: false,
-    goldenSpiralNodes: []
+  const [focus15State, setFocus15State] = useState<Focus15State>({
+    timeCollapseEvent: false,
+    recursiveGeometries: [],
+    symbolicTimeDistortion: [],
+    noTimeLayer: {
+      active: false,
+      recursiveSigils: []
+    },
+    atemporalEvents: []
   });
 
   const initializeAudioContext = useCallback(async () => {
     try {
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      if (!audioContextRef.current) {
+        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      }
+
+      const audioContext = audioContextRef.current;
       
       if (micEnabled) {
         const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -71,23 +80,21 @@ const DRREngine: React.FC<DRREngineProps> = ({
         });
         
         micStreamRef.current = stream;
-        const source = audioContextRef.current.createMediaStreamSource(stream);
+        const source = audioContext.createMediaStreamSource(stream);
         
-        // Create high-resolution analyser
-        const analyser = audioContextRef.current.createAnalyser();
-        analyser.fftSize = 8192; // High resolution for precise frequency analysis
-        analyser.smoothingTimeConstant = 0.1; // Lower smoothing for more responsive analysis
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 8192;
+        analyser.smoothingTimeConstant = 0.1;
         analyser.minDecibels = -90;
         analyser.maxDecibels = -10;
         
         source.connect(analyser);
         analyserRef.current = analyser;
         
-        // Initialize data arrays
         fftDataRef.current = new Float32Array(analyser.frequencyBinCount);
         phaseDataRef.current = new Float32Array(analyser.frequencyBinCount);
         
-        console.log('DRR Engine initialized with high-resolution FFT');
+        console.log('DRR Engine initialized with Focus 15 Time Collapse detection');
       }
     } catch (error) {
       console.error('Failed to initialize DRR Engine:', error);
@@ -102,7 +109,6 @@ const DRREngine: React.FC<DRREngineProps> = ({
       const phaseDiff = Math.abs(phases[i] - phases[i-1]);
       const freqDiff = Math.abs(frequencies[i] - frequencies[i-1]);
       
-      // Higher stability when phase differences are proportional to frequency ratios
       if (freqDiff > 0) {
         const coherence = 1 - Math.min(phaseDiff / Math.PI, 1);
         stability += coherence;
@@ -115,7 +121,6 @@ const DRREngine: React.FC<DRREngineProps> = ({
   const calculateVibrationalCoherence = useCallback((amplitudes: number[], frequencies: number[]): number => {
     if (amplitudes.length === 0) return 0;
     
-    // Calculate coherence based on harmonic relationships
     let harmonicScore = 0;
     const fundamentalFreq = Math.min(...frequencies.filter(f => f > 0));
     
@@ -125,7 +130,7 @@ const DRREngine: React.FC<DRREngineProps> = ({
         const nearestHarmonic = Math.round(ratio);
         const harmonicError = Math.abs(ratio - nearestHarmonic);
         
-        if (harmonicError < 0.05) { // Within 5% of harmonic
+        if (harmonicError < 0.05) {
           harmonicScore += amplitudes[i] * (1 - harmonicError);
         }
       }
@@ -143,11 +148,11 @@ const DRREngine: React.FC<DRREngineProps> = ({
     let pairCount = 0;
     
     for (let i = 0; i < frequencies.length - 1; i++) {
-      for (let j = i + 1; j < frequencies.length; j++) {
+      for (let j = i + 1; j < frequencies.length, j++) {
         const ratio = frequencies[j] / frequencies[i];
         const goldenError = Math.abs(ratio - goldenRatio);
         
-        if (goldenError < 0.1) { // Within 10% of golden ratio
+        if (goldenError < 0.1) {
           alignmentScore += 1 - goldenError;
           pairCount++;
         }
@@ -161,9 +166,8 @@ const DRREngine: React.FC<DRREngineProps> = ({
     const frequencies: number[] = [];
     const amplitudes: number[] = [];
     const phases: number[] = [];
-    const threshold = -60; // dB threshold
+    const threshold = -60;
     
-    // Find peaks in frequency domain
     for (let i = 2; i < fftData.length - 2; i++) {
       const current = fftData[i];
       
@@ -174,8 +178,8 @@ const DRREngine: React.FC<DRREngineProps> = ({
           current > fftData[i+2]) {
         
         const frequency = (i / fftData.length) * (sampleRate / 2);
-        const amplitude = Math.pow(10, current / 20); // Convert dB to linear
-        const phase = Math.atan2(Math.sin(i * 0.1), Math.cos(i * 0.1)); // Simplified phase calculation
+        const amplitude = Math.pow(10, current / 20);
+        const phase = Math.atan2(Math.sin(i * 0.1), Math.cos(i * 0.1));
         
         frequencies.push(frequency);
         amplitudes.push(amplitude);
@@ -183,7 +187,6 @@ const DRREngine: React.FC<DRREngineProps> = ({
       }
     }
     
-    // Sort by amplitude and take top 12
     const combined = frequencies.map((freq, i) => ({
       frequency: freq,
       amplitude: amplitudes[i],
@@ -216,6 +219,96 @@ const DRREngine: React.FC<DRREngineProps> = ({
       };
     });
   }, []);
+
+  const detectTimeCollapseEvent = useCallback((variance: number, currentTime: number): boolean => {
+    // Track variance history for stability detection
+    varianceHistoryRef.current.push(variance);
+    if (varianceHistoryRef.current.length > 200) { // Keep last 200 readings (~50 seconds at 4Hz)
+      varianceHistoryRef.current.shift();
+    }
+
+    // Check if variance is below threshold
+    if (variance < 0.01) {
+      if (stabilityStartTimeRef.current === null) {
+        stabilityStartTimeRef.current = currentTime;
+      }
+      
+      const stabilityDuration = currentTime - stabilityStartTimeRef.current;
+      
+      // Trigger Time Collapse Event after 45 seconds of stability
+      if (stabilityDuration >= 45000 && !drrState.timeCollapseActive) {
+        console.log('TIME COLLAPSE EVENT: Initiating Focus 15 transition');
+        return true;
+      }
+    } else {
+      stabilityStartTimeRef.current = null;
+    }
+    
+    return false;
+  }, [drrState.timeCollapseActive]);
+
+  const generateRecursiveGeometries = useCallback((nodes: DRRNode[]): any[] => {
+    return nodes.map((node, i) => ({
+      id: `recursive_${i}_${Date.now()}`,
+      x: node.x,
+      y: node.y,
+      recursionDepth: Math.floor(node.amplitude * 8) + 1,
+      foldingAngle: node.phase + (Date.now() * 0.001)
+    }));
+  }, []);
+
+  const generateSymbolicTimeDistortion = useCallback((currentNodes: DRRNode[]): any[] => {
+    // Predict future forms based on DRR trends
+    const trendPrediction = varianceHistoryRef.current.length > 10 
+      ? varianceHistoryRef.current.slice(-10).reduce((sum, v) => sum + v, 0) / 10
+      : 0;
+
+    return sessionSymbolsRef.current.map((symbol, i) => ({
+      symbolId: symbol.id,
+      originalTimestamp: symbol.timestamp,
+      currentPhase: (Date.now() - symbol.timestamp) * 0.001,
+      futureOverlay: trendPrediction * (i + 1),
+      counterclockwiseRotation: -(Date.now() * 0.002 + i)
+    }));
+  }, []);
+
+  const generateNoTimeLayer = useCallback((accumulatedData: DRRNode[]): any => {
+    const recursiveSigils = accumulatedData.map((node, i) => {
+      const pattern = `sigil_${Math.floor(node.frequency)}_${Math.floor(node.amplitude * 100)}`;
+      
+      return {
+        pattern,
+        mirrorState: i % 2 === 0,
+        parallaxDepth: (i / accumulatedData.length) * 100,
+        resonanceSignature: [node.frequency, node.amplitude, node.phase]
+      };
+    });
+
+    return {
+      active: true,
+      recursiveSigils
+    };
+  }, []);
+
+  const createAtemporalEvent = useCallback((resonanceData: DRRNode[]): AtemporalEvent => {
+    return {
+      randomizedTimestamp: Date.now() + (Math.random() - 0.5) * 300000, // ±5 minutes random offset
+      actualTimestamp: Date.now(),
+      resonanceSignature: resonanceData.map(n => n.frequency),
+      symbolicPattern: {
+        type: `pattern_${Math.floor(Math.random() * 8)}`,
+        recursionLevel: Math.floor(Math.random() * 5) + 1,
+        mirrorState: Math.random() > 0.5,
+        parallaxDepth: Math.random() * 100
+      },
+      drrMemory: {
+        accumulatedVariance: [...varianceHistoryRef.current],
+        trendPrediction: resonanceData.map(n => n.amplitude),
+        resonanceHistory: [...drrState.resonanceMemory]
+      },
+      noTimeMarkers: true
+    };
+  }, [drrState.resonanceMemory]);
 
   const updateCreativeFlow = useCallback((vibrationalCoherence: number, timestamp: number) => {
     const shouldInjectDissonance = timestamp > creativeFlow.nextInjectionTime && 
@@ -288,34 +381,29 @@ const DRREngine: React.FC<DRREngineProps> = ({
     }
     
     const currentTime = Date.now();
-    if (currentTime - lastUpdateRef.current < 250) { // Update every 250ms as specified
+    if (currentTime - lastUpdateRef.current < 250) {
       return;
     }
     
     lastUpdateRef.current = currentTime;
     
-    // Get frequency domain data
     analyserRef.current.getFloatFrequencyData(fftDataRef.current);
     
-    // Extract dominant frequencies and their properties
     const { frequencies, amplitudes, phases } = extractDominantFrequencies(
       fftDataRef.current, 
       audioContextRef.current.sampleRate
     );
     
-    // Calculate advanced metrics
     const spectralPhaseStability = calculateSpectralPhaseStability(frequencies, phases);
     const vibrationalCoherence = calculateVibrationalCoherence(amplitudes, frequencies);
     const goldenRatioAlignment = calculateGoldenRatioAlignment(frequencies);
     
-    // Update amplitude history for variance calculation
     const currentAmplitude = amplitudes.reduce((sum, amp) => sum + amp, 0) / amplitudes.length;
     amplitudeHistoryRef.current.push(currentAmplitude);
     if (amplitudeHistoryRef.current.length > 20) {
       amplitudeHistoryRef.current.shift();
     }
     
-    // Calculate amplitude variance (breath rhythm detection)
     const amplitudeVariance = amplitudeHistoryRef.current.length > 1 ? 
       amplitudeHistoryRef.current.reduce((sum, val, i, arr) => {
         if (i === 0) return 0;
@@ -325,7 +413,27 @@ const DRREngine: React.FC<DRREngineProps> = ({
     const breathRhythm = Math.min(amplitudeVariance * 10, 1);
     const harmonicConvergence = vibrationalCoherence > 0.8 && spectralPhaseStability > 0.7;
     
-    // Update DRR state
+    // Store session symbols for time distortion
+    if (harmonicConvergence) {
+      sessionSymbolsRef.current.push({
+        id: `symbol_${Date.now()}`,
+        timestamp: currentTime,
+        pattern: { frequencies, amplitudes, phases }
+      });
+    }
+    
+    // Detect Time Collapse Event
+    const timeCollapseTriggered = detectTimeCollapseEvent(amplitudeVariance, currentTime);
+    
+    const resonanceNodes = generateResonanceNodes(frequencies, amplitudes, phases);
+    
+    // Update resonance memory for Focus 15
+    const updatedResonanceMemory = [...drrState.resonanceMemory, ...resonanceNodes].slice(-100); // Keep last 100
+    
+    const stabilityDuration = stabilityStartTimeRef.current 
+      ? currentTime - stabilityStartTimeRef.current 
+      : 0;
+
     const newDrrState: DRREngineState = {
       isActive: true,
       currentPhase: (drrState.currentPhase + 0.1) % (Math.PI * 2),
@@ -335,38 +443,66 @@ const DRREngine: React.FC<DRREngineProps> = ({
       breathRhythm,
       amplitudeVariance,
       harmonicConvergence,
-      goldenRatioAlignment
+      goldenRatioAlignment,
+      varianceHistory: [...varianceHistoryRef.current],
+      timeCollapseActive: timeCollapseTriggered || drrState.timeCollapseActive,
+      resonanceMemory: updatedResonanceMemory,
+      stabilityDuration: Math.floor(stabilityDuration / 1000)
     };
     
     setDrrState(newDrrState);
     onDRRStateUpdate(newDrrState);
     
-    // Generate resonance nodes
-    const resonanceNodes = generateResonanceNodes(frequencies, amplitudes, phases);
+    // Generate Focus 15 state if Time Collapse is active
+    if (newDrrState.timeCollapseActive) {
+      const newFocus15State: Focus15State = {
+        timeCollapseEvent: true,
+        recursiveGeometries: generateRecursiveGeometries(resonanceNodes),
+        symbolicTimeDistortion: generateSymbolicTimeDistortion(resonanceNodes),
+        noTimeLayer: generateNoTimeLayer(updatedResonanceMemory),
+        atemporalEvents: [...focus15State.atemporalEvents, createAtemporalEvent(resonanceNodes)]
+      };
+      
+      setFocus15State(newFocus15State);
+      onFocus15StateUpdate(newFocus15State);
+    }
+    
     onResonanceUpdate(resonanceNodes);
     
     // Update audio configuration based on DRR state
     const carrierFreq = frequencies[0] || 440;
-    const binauralBeat = 10 - (vibrationalCoherence * 8); // Higher coherence = lower beat frequency
-    const leftChannel = carrierFreq;
-    const rightChannel = carrierFreq + binauralBeat;
+    let binauralBeat = 10 - (vibrationalCoherence * 8);
     
-    onAudioConfigUpdate({
+    // Focus 15 Time Collapse audio modulation
+    if (newDrrState.timeCollapseActive) {
+      const collapseProgress = Math.min(stabilityDuration / 180000, 1); // 3 minutes to full collapse
+      binauralBeat = 4 - (collapseProgress * 3.5); // Descend from 4 Hz to 0.5 Hz
+    }
+    
+    const audioConfig: AudioConfig = {
       carrierFreq,
       binauralBeat,
       infrasonicLayer: harmonicConvergence ? 0.9 : 0,
-      modulationRhythm: breathRhythm,
-      leftChannel,
-      rightChannel
-    });
+      modulationRhythm: newDrrState.timeCollapseActive ? 0 : breathRhythm, // Detach from breath in Focus 15
+      leftChannel: carrierFreq,
+      rightChannel: carrierFreq + binauralBeat,
+      infrasonicPulses: newDrrState.timeCollapseActive ? [
+        { frequency: 0.9, amplitude: 0.3 },
+        { frequency: 1.618, amplitude: 0.2 }
+      ] : undefined
+    };
     
-    // Update creative flow and intuitive foresight
+    onAudioConfigUpdate(audioConfig);
+    
     updateCreativeFlow(vibrationalCoherence, currentTime);
     updateIntuitiveForesight(goldenRatioAlignment, harmonicConvergence, resonanceNodes);
     
-  }, [isActive, drrState.currentPhase, calculateSpectralPhaseStability, calculateVibrationalCoherence, 
+  }, [isActive, drrState, focus15State, detectTimeCollapseEvent, generateRecursiveGeometries, 
+      generateSymbolicTimeDistortion, generateNoTimeLayer, createAtemporalEvent, 
+      calculateSpectralPhaseStability, calculateVibrationalCoherence, 
       calculateGoldenRatioAlignment, extractDominantFrequencies, generateResonanceNodes, 
-      onDRRStateUpdate, onResonanceUpdate, onAudioConfigUpdate, updateCreativeFlow, updateIntuitiveForesight]);
+      onDRRStateUpdate, onResonanceUpdate, onAudioConfigUpdate, onFocus15StateUpdate,
+      updateCreativeFlow, updateIntuitiveForesight]);
 
   useEffect(() => {
     if (isActive && micEnabled) {
@@ -383,7 +519,7 @@ const DRREngine: React.FC<DRREngineProps> = ({
   useEffect(() => {
     if (!isActive) return;
     
-    const intervalId = setInterval(processAudioFrame, 100); // Process more frequently than update
+    const intervalId = setInterval(processAudioFrame, 100);
     
     return () => clearInterval(intervalId);
   }, [isActive, processAudioFrame]);

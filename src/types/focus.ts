@@ -21,6 +21,10 @@ export interface AudioConfig {
   modulationRhythm: number;
   leftChannel: number;
   rightChannel: number;
+  infrasonicPulses?: {
+    frequency: number;
+    amplitude: number;
+  }[];
 }
 
 export interface SessionLogEntry {
@@ -39,6 +43,24 @@ export interface SessionLogEntry {
   };
 }
 
+export interface AtemporalEvent {
+  randomizedTimestamp: number;
+  actualTimestamp: number;
+  resonanceSignature: number[];
+  symbolicPattern: {
+    type: string;
+    recursionLevel: number;
+    mirrorState: boolean;
+    parallaxDepth: number;
+  };
+  drrMemory: {
+    accumulatedVariance: number[];
+    trendPrediction: number[];
+    resonanceHistory: DRRNode[];
+  };
+  noTimeMarkers: boolean;
+}
+
 export interface ModuleConfig {
   memoryStream: boolean;
   intuitiveForesight: boolean;
@@ -55,6 +77,10 @@ export interface DRREngineState {
   amplitudeVariance: number;
   harmonicConvergence: boolean;
   goldenRatioAlignment: number;
+  varianceHistory: number[];
+  timeCollapseActive: boolean;
+  resonanceMemory: DRRNode[];
+  stabilityDuration: number;
 }
 
 export interface CreativeFlowState {
@@ -69,4 +95,32 @@ export interface IntuitiveForesightState {
   spiralIntensity: number;
   convergenceDetected: boolean;
   goldenSpiralNodes: Array<{x: number, y: number, intensity: number}>;
+}
+
+export interface Focus15State {
+  timeCollapseEvent: boolean;
+  recursiveGeometries: Array<{
+    id: string;
+    x: number;
+    y: number;
+    recursionDepth: number;
+    foldingAngle: number;
+  }>;
+  symbolicTimeDistortion: Array<{
+    symbolId: string;
+    originalTimestamp: number;
+    currentPhase: number;
+    futureOverlay: number;
+    counterclockwiseRotation: number;
+  }>;
+  noTimeLayer: {
+    active: boolean;
+    recursiveSigils: Array<{
+      pattern: string;
+      mirrorState: boolean;
+      parallaxDepth: number;
+      resonanceSignature: number[];
+    }>;
+  };
+  atemporalEvents: AtemporalEvent[];
 }
