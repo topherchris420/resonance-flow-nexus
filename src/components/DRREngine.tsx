@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { DRRNode, DRREngineState, AudioConfig, CreativeFlowState, IntuitiveForesightState, Focus15State, AtemporalEvent } from '../types/focus';
 
@@ -148,7 +149,7 @@ const DRREngine: React.FC<DRREngineProps> = ({
     let pairCount = 0;
     
     for (let i = 0; i < frequencies.length - 1; i++) {
-      for (let j = i + 1; j < frequencies.length, j++) {
+      for (let j = i + 1; j < frequencies.length; j++) {
         const ratio = frequencies[j] / frequencies[i];
         const goldenError = Math.abs(ratio - goldenRatio);
         
