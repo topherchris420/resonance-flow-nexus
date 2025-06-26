@@ -10,6 +10,8 @@ export interface DRRNode {
   x: number;
   y: number;
   timestamp: number;
+  harmonicIndex?: number;
+  resonanceDepth?: number;
 }
 
 export interface AudioConfig {
@@ -17,6 +19,8 @@ export interface AudioConfig {
   binauralBeat: number;
   infrasonicLayer: number;
   modulationRhythm: number;
+  leftChannel: number;
+  rightChannel: number;
 }
 
 export interface SessionLogEntry {
@@ -26,10 +30,43 @@ export interface SessionLogEntry {
   amplitude: number[];
   stateLabel: FocusState;
   breathCoherence: number;
+  vibrationalCoherence: number;
+  spectralPhaseStability: number;
+  resonanceGeometry: {
+    nodes: DRRNode[];
+    mandalaComplexity: number;
+    goldenRatioAlignment: number;
+  };
 }
 
 export interface ModuleConfig {
   memoryStream: boolean;
   intuitiveForesight: boolean;
   creativeFlow: boolean;
+}
+
+export interface DRREngineState {
+  isActive: boolean;
+  currentPhase: number;
+  dominantFrequencies: number[];
+  spectralPhaseStability: number;
+  vibrationalCoherence: number;
+  breathRhythm: number;
+  amplitudeVariance: number;
+  harmonicConvergence: boolean;
+  goldenRatioAlignment: number;
+}
+
+export interface CreativeFlowState {
+  enabled: boolean;
+  dissonanceLevel: number;
+  rhythmicInjections: boolean;
+  nextInjectionTime: number;
+}
+
+export interface IntuitiveForesightState {
+  enabled: boolean;
+  spiralIntensity: number;
+  convergenceDetected: boolean;
+  goldenSpiralNodes: Array<{x: number, y: number, intensity: number}>;
 }
