@@ -228,7 +228,7 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
   }, [isActive]);
 
   return null;
-};
+});
 
 AudioEngine.displayName = 'AudioEngine';
 
