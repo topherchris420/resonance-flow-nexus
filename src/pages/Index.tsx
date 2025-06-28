@@ -1,10 +1,12 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import MainCanvas from '../components/MainCanvas';
 import Header from '../components/Header';
 import ResponsiveLayout from '../components/ResponsiveLayout';
 import MobileControls from '../components/MobileControls';
 import DesktopSidebar from '../components/DesktopSidebar';
+import WelcomeOverlay from '../components/WelcomeOverlay';
+import FloatingHelp from '../components/FloatingHelp';
 import { useStateHandlers } from '../hooks/useStateHandlers';
 import { useSessionManager } from '../components/SessionManager';
 import { FocusState, DRRNode, DRREngineState, AudioConfig, CreativeFlowState, IntuitiveForesightState, SessionLogEntry, Focus15State } from '../types/focus';
@@ -21,8 +23,18 @@ const Index = () => {
   const [creativeFlowState, setCreativeFlowState] = useState<CreativeFlowState | undefined>();
   const [intuitiveForesightState, setIntuitiveForesightState] = useState<IntuitiveForesightState | undefined>();
   const [focus15State, setFocus15State] = useState<Focus15State | undefined>();
+  const [showWelcome, setShowWelcome] = useState(false);
   
   const audioEngineRef = useRef<any>(null);
+
+  // Check if this is the user's first visit
+  useEffect(() => {
+    const hasVisited = localStorage.getItem('hello-app-visited');
+    if (!hasVisited) {
+      setShowWelcome(true);
+      localStorage.setItem('hello-app-visited', 'true');
+    }
+  }, []);
 
   const stateHandlers = useStateHandlers({
     focusState,
@@ -54,6 +66,15 @@ const Index = () => {
 
   const toggleMicrophone = () => {
     setMicEnabled(!micEnabled);
+  };
+
+  const handleWelcomeStart = () => {
+    setShowWelcome(false);
+    toggleSession();
+  };
+
+  const handleWelcomeClose = () => {
+    setShowWelcome(false);
   };
 
   return (
@@ -105,6 +126,17 @@ const Index = () => {
         onToggleMicrophone={toggleMicrophone}
         onFocusTransition={stateHandlers.handleFocusTransition}
       />
+
+      {/* Welcome Overlay for new users */}
+      {showWelcome && (
+        <WelcomeOverlay
+          onStart={handleWelcomeStart}
+          onClose={handleWelcomeClose}
+        />
+      )}
+
+      {/* Floating Help Button */}
+      <FloatingHelp />
     </ResponsiveLayout>
   );
 };
