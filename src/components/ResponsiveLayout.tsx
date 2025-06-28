@@ -14,8 +14,17 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({ children, className
       "relative overflow-hidden",
       "flex flex-col",
       className
-    )}>
-      <div className="flex-1 relative">
+    )}
+    style={{
+      backgroundImage: `url(/lovable-uploads/a266cd75-6e99-4f5e-a3e0-a4b88e516e38.png)`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }}>
+      {/* Dark overlay to ensure text readability */}
+      <div className="absolute inset-0 bg-black/40 z-0" />
+      
+      <div className="flex-1 relative z-10">
         {children}
       </div>
     </div>
