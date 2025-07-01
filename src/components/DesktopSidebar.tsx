@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Play, Pause, Mic, MicOff, Sparkles, Brain, Waves } from 'lucide-react';
+import { Play, Pause, Mic, MicOff, Sparkles, Brain, Waves, Zap, Activity, Eye } from 'lucide-react';
 import { FocusState, DRREngineState, CreativeFlowState, IntuitiveForesightState } from '@/types/focus';
 
 interface DesktopSidebarProps {
@@ -43,118 +43,182 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
 
   const getFocusIcon = (state: FocusState) => {
     switch (state) {
-      case 'Focus 12': return <Waves className="w-4 h-4 text-blue-400" />;
-      case 'Focus 15': return <Brain className="w-4 h-4 text-purple-400" />;
-      case 'Focus 21': return <Sparkles className="w-4 h-4 text-yellow-400" />;
-      default: return <Waves className="w-4 h-4" />;
+      case 'Focus 12': return <Waves className="w-5 h-5 text-blue-400" />;
+      case 'Focus 15': return <Zap className="w-5 h-5 text-purple-400" />;
+      case 'Focus 21': return <Sparkles className="w-5 h-5 text-yellow-400" />;
+      default: return <Waves className="w-5 h-5" />;
     }
   };
 
+  const getMetricColor = (value: number) => {
+    if (value > 0.7) return 'text-green-400';
+    if (value > 0.4) return 'text-yellow-400';
+    return 'text-red-400';
+  };
+
+  const getMetricDot = (value: number) => {
+    const colorClass = value > 0.5 ? 'bg-green-400' : 'bg-gray-500';
+    return <div className={`w-2 h-2 rounded-full ${colorClass} ${value > 0.5 ? 'animate-pulse' : ''}`}></div>;
+  };
+
   return (
-    <div className="hidden sm:flex fixed right-0 top-16 bottom-0 w-80 bg-black/80 backdrop-blur-sm border-l border-white/10 p-4 flex-col space-y-4 overflow-y-auto">
+    <div className="hidden sm:flex fixed right-0 top-16 bottom-0 w-80 bg-gradient-to-b from-black/90 to-gray-900/90 backdrop-blur-lg border-l border-white/20 p-6 flex-col space-y-6 overflow-y-auto shadow-2xl">
       {/* Main Controls */}
-      <Card className="bg-white/5 border-white/10 shadow-lg">
+      <Card className="bg-gradient-to-br from-white/10 to-white/5 border-white/20 shadow-xl backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="text-white text-lg flex items-center space-x-2">
-            <Sparkles className="w-5 h-5 text-blue-400" />
+          <CardTitle className="text-white text-xl flex items-center space-x-3">
+            <div className="p-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg">
+              <Sparkles className="w-6 h-6 text-blue-400" />
+            </div>
             <span>Experience Controls</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-4">
           <Button
             onClick={onToggleSession}
             variant="outline"
-            className={`w-full flex items-center space-x-2 transition-all duration-200 ${
+            className={`w-full flex items-center space-x-3 transition-all duration-300 transform hover:scale-[1.02] shadow-lg text-base py-6 ${
               isActive 
-                ? 'bg-red-500/20 border-red-400/40 text-red-300 hover:bg-red-500/30' 
-                : 'bg-green-500/20 border-green-400/40 text-green-300 hover:bg-green-500/30'
+                ? 'bg-gradient-to-r from-red-500/30 to-pink-500/30 border-red-400/50 text-red-300 hover:from-red-500/40 hover:to-pink-500/40' 
+                : 'bg-gradient-to-r from-green-500/30 to-emerald-500/30 border-green-400/50 text-green-300 hover:from-green-500/40 hover:to-emerald-500/40'
             }`}
           >
-            {isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            <span>{isActive ? 'Pause Session' : 'Begin Experience'}</span>
-            {!isActive && <Sparkles className="w-3 h-3 animate-pulse" />}
+            <div className="p-2 bg-white/10 rounded-lg">
+              {isActive ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+            </div>
+            <span className="font-semibold">{isActive ? 'Pause Session' : 'Begin Experience'}</span>
+            {!isActive && <Sparkles className="w-4 h-4 animate-pulse ml-auto" />}
           </Button>
 
           <Button
             onClick={onToggleMicrophone}
             variant="outline"
-            className={`w-full flex items-center space-x-2 border-white/20 transition-all duration-200 ${
+            className={`w-full flex items-center space-x-3 border-white/30 transition-all duration-300 transform hover:scale-[1.02] shadow-lg text-base py-6 ${
               micEnabled 
-                ? 'bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 ring-2 ring-blue-500/20' 
+                ? 'bg-gradient-to-r from-blue-500/30 to-cyan-500/30 text-blue-300 hover:from-blue-500/40 hover:to-cyan-500/40 ring-2 ring-blue-500/30' 
                 : 'bg-white/10 text-white hover:bg-white/20'
             }`}
           >
-            {micEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
-            <span>{micEnabled ? 'Mic Active' : 'Enable Microphone'}</span>
+            <div className="p-2 bg-white/10 rounded-lg">
+              {micEnabled ? <Mic className="w-5 h-5" /> : <MicOff className="w-5 h-5" />}
+            </div>
+            <span className="font-semibold">{micEnabled ? 'Microphone Active' : 'Enable Microphone'}</span>
+            {micEnabled && <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse ml-auto"></div>}
           </Button>
         </CardContent>
       </Card>
 
       {/* Focus States */}
-      <Card className="bg-white/5 border-white/10 shadow-lg">
+      <Card className="bg-gradient-to-br from-white/10 to-white/5 border-white/20 shadow-xl backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="text-white text-lg flex items-center space-x-2">
-            <Brain className="w-5 h-5 text-purple-400" />
+          <CardTitle className="text-white text-xl flex items-center space-x-3">
+            <div className="p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg">
+              <Brain className="w-6 h-6 text-purple-400" />
+            </div>
             <span>Focus States</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="space-y-3">
           {focusStates.map((state) => (
             <Button
               key={state}
               onClick={() => onFocusTransition(state)}
               variant={focusState === state ? "default" : "outline"}
-              className={`w-full justify-start p-3 h-auto flex-col items-start transition-all duration-200 ${
+              className={`w-full justify-start p-4 h-auto flex items-center space-x-4 transition-all duration-300 transform hover:scale-[1.02] ${
                 focusState === state
-                  ? 'bg-blue-500 text-white ring-2 ring-blue-400/50'
-                  : 'bg-white/5 border-white/20 text-white hover:bg-white/10'
+                  ? 'bg-gradient-to-r from-blue-500/40 to-purple-500/40 text-white ring-2 ring-blue-400/60 shadow-xl'
+                  : 'bg-white/5 border-white/20 text-white hover:bg-white/10 hover:border-white/30'
               }`}
             >
-              <div className="flex items-center space-x-2 w-full">
+              <div className="p-2 bg-white/10 rounded-lg">
                 {getFocusIcon(state)}
-                <span className="font-medium">{state}</span>
-                {focusState === state && <div className="ml-auto w-2 h-2 bg-white rounded-full animate-pulse"></div>}
               </div>
-              <span className="text-xs opacity-80 mt-1 text-left">{getFocusDescription(state)}</span>
+              <div className="flex-1 text-left">
+                <div className="font-semibold text-base">{state}</div>
+                <div className="text-sm opacity-90 mt-1">{getFocusDescription(state)}</div>
+              </div>
+              {focusState === state && (
+                <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+              )}
             </Button>
           ))}
         </CardContent>
       </Card>
 
-      {/* Metrics */}
-      <Card className="bg-white/5 border-white/10 shadow-lg">
+      {/* Enhanced Metrics */}
+      <Card className="bg-gradient-to-br from-white/10 to-white/5 border-white/20 shadow-xl backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="text-white text-lg flex items-center space-x-2">
-            <Waves className="w-5 h-5 text-green-400" />
+          <CardTitle className="text-white text-xl flex items-center space-x-3">
+            <div className="p-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-lg">
+              <Activity className="w-6 h-6 text-green-400" />
+            </div>
             <span>Live Metrics</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="text-sm text-white/80">
-            <div className="flex justify-between items-center">
-              <span>Breath Coherence:</span>
+        <CardContent className="space-y-4">
+          <div className="space-y-3 text-sm">
+            <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-white/10">
+              <span className="text-white/90 font-medium">Breath Coherence:</span>
               <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${breathCoherence > 0.5 ? 'bg-green-400 animate-pulse' : 'bg-gray-500'}`}></div>
-                <span className="text-blue-300 font-mono">{breathCoherence.toFixed(2)}</span>
+                {getMetricDot(breathCoherence)}
+                <span className={`font-mono font-bold ${getMetricColor(breathCoherence)}`}>
+                  {(breathCoherence * 100).toFixed(0)}%
+                </span>
               </div>
             </div>
+            
             {drrState && (
               <>
-                <div className="flex justify-between items-center">
-                  <span>Vibrational:</span>
+                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-white/10">
+                  <span className="text-white/90 font-medium">Vibrational:</span>
                   <div className="flex items-center space-x-2">
-                    <div className={`w-2 h-2 rounded-full ${drrState.vibrationalCoherence > 0.5 ? 'bg-green-400 animate-pulse' : 'bg-gray-500'}`}></div>
-                    <span className="text-green-300 font-mono">{drrState.vibrationalCoherence.toFixed(2)}</span>
+                    {getMetricDot(drrState.vibrationalCoherence)}
+                    <span className={`font-mono font-bold ${getMetricColor(drrState.vibrationalCoherence)}`}>
+                      {(drrState.vibrationalCoherence * 100).toFixed(0)}%
+                    </span>
                   </div>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span>Phase Stability:</span>
+                
+                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-white/10">
+                  <span className="text-white/90 font-medium">Phase Stability:</span>
                   <div className="flex items-center space-x-2">
-                    <div className={`w-2 h-2 rounded-full ${drrState.spectralPhaseStability > 0.5 ? 'bg-purple-400 animate-pulse' : 'bg-gray-500'}`}></div>
-                    <span className="text-purple-300 font-mono">{drrState.spectralPhaseStability.toFixed(2)}</span>
+                    {getMetricDot(drrState.spectralPhaseStability)}
+                    <span className={`font-mono font-bold ${getMetricColor(drrState.spectralPhaseStability)}`}>
+                      {(drrState.spectralPhaseStability * 100).toFixed(0)}%
+                    </span>
                   </div>
                 </div>
+
+                {drrState.goldenRatioAlignment > 0 && (
+                  <div className="flex justify-between items-center p-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-lg border border-yellow-400/20">
+                    <span className="text-yellow-300 font-medium flex items-center space-x-2">
+                      <Eye className="w-4 h-4" />
+                      <span>Golden Ratio:</span>
+                    </span>
+                    <span className="font-mono font-bold text-yellow-400">
+                      {(drrState.goldenRatioAlignment * 100).toFixed(0)}%
+                    </span>
+                  </div>
+                )}
               </>
+            )}
+
+            {creativeFlowState?.enabled && (
+              <div className="flex justify-between items-center p-3 bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-lg border border-orange-400/20">
+                <span className="text-orange-300 font-medium">Creative Flow:</span>
+                <span className="font-mono font-bold text-orange-400">
+                  {(creativeFlowState.dissonanceLevel * 100).toFixed(0)}%
+                </span>
+              </div>
+            )}
+
+            {intuitiveForesightState?.convergenceDetected && (
+              <div className="flex justify-between items-center p-3 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-lg border border-purple-400/20">
+                <span className="text-purple-300 font-medium">Intuitive Spiral:</span>
+                <span className="font-mono font-bold text-purple-400">
+                  {(intuitiveForesightState.spiralIntensity * 100).toFixed(0)}%
+                </span>
+              </div>
             )}
           </div>
         </CardContent>
