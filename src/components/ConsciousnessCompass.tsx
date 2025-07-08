@@ -130,7 +130,7 @@ const ConsciousnessCompass: React.FC<ConsciousnessCompassProps> = ({
             {Math.round(coherenceLevel * 100)}% aligned
           </div>
           
-          {focus15State?.timeCollapseActive && (
+          {focus15State?.timeCollapseEvent && (
             <div className="flex items-center justify-center space-x-1 mt-2">
               <Zap className="w-3 h-3 text-orange-400 animate-pulse" />
               <span className="text-xs text-orange-400">Time Collapse</span>

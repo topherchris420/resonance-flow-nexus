@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import MainCanvas from '../components/MainCanvas';
 import Header from '../components/Header';
@@ -90,10 +91,12 @@ const Index = () => {
       breathCoherence,
       resonanceGeometry: {
         nodes: resonanceNodes,
+        mandalaComplexity: resonanceNodes.length,
         goldenRatioAlignment: drrState?.goldenRatioAlignment || 0
       },
       nodeFrequencies: drrState?.dominantFrequencies || [],
-      phase: []
+      phase: resonanceNodes.map(node => node.phase),
+      amplitude: resonanceNodes.map(node => node.amplitude)
     }]);
   };
 
