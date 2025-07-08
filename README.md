@@ -1,5 +1,5 @@
 
-# Hello - Advanced Consciousness Exploration Platform
+# Hello Goodbye - Advanced Consciousness Exploration Platform
 
 Welcome to **Hello**, a revolutionary consciousness exploration platform that combines cutting-edge audio technology, biofeedback systems, and sacred geometry visualization to guide users through profound states of awareness.
 
