@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import MainCanvas from '../components/MainCanvas';
 import Header from '../components/Header';
@@ -7,6 +6,9 @@ import MobileControls from '../components/MobileControls';
 import DesktopSidebar from '../components/DesktopSidebar';
 import WelcomeOverlay from '../components/WelcomeOverlay';
 import FloatingHelp from '../components/FloatingHelp';
+import ConsciousnessCompass from '../components/ConsciousnessCompass';
+import QuantumCoherenceDetector from '../components/QuantumCoherenceDetector';
+import BiorhythmSynchronizer from '../components/BiorhythmSynchronizer';
 import { useStateHandlers } from '../hooks/useStateHandlers';
 import { useSessionManager } from '../components/SessionManager';
 import { FocusState, DRRNode, DRREngineState, AudioConfig, CreativeFlowState, IntuitiveForesightState, SessionLogEntry, Focus15State } from '../types/focus';
@@ -77,6 +79,24 @@ const Index = () => {
     setShowWelcome(false);
   };
 
+  const handleQuantumEvent = (intensity: number) => {
+    console.log(`QUANTUM COHERENCE EVENT: Intensity ${intensity.toFixed(3)}`);
+    // Add quantum event to session log
+    setSessionLog(prev => [...prev, {
+      timestamp: Date.now(),
+      stateLabel: `${focusState} - Quantum Event`,
+      vibrationalCoherence: drrState?.vibrationalCoherence || 0,
+      spectralPhaseStability: drrState?.spectralPhaseStability || 0,
+      breathCoherence,
+      resonanceGeometry: {
+        nodes: resonanceNodes,
+        goldenRatioAlignment: drrState?.goldenRatioAlignment || 0
+      },
+      nodeFrequencies: drrState?.dominantFrequencies || [],
+      phase: []
+    }]);
+  };
+
   return (
     <ResponsiveLayout>
       <Header />
@@ -101,6 +121,25 @@ const Index = () => {
         onFocus15StateUpdate={stateHandlers.handleFocus15StateUpdate}
         onFocusTransition={stateHandlers.handleFocusTransition}
         onBreathCoherenceUpdate={setBreathCoherence}
+      />
+      
+      {/* Enhanced Consciousness Widgets */}
+      <ConsciousnessCompass
+        drrState={drrState}
+        focus15State={focus15State}
+        isActive={isActive}
+      />
+      
+      <QuantumCoherenceDetector
+        drrState={drrState}
+        isActive={isActive}
+        onQuantumEvent={handleQuantumEvent}
+      />
+      
+      <BiorhythmSynchronizer
+        drrState={drrState}
+        breathCoherence={breathCoherence}
+        isActive={isActive}
       />
       
       {/* Mobile Controls */}
