@@ -85,7 +85,7 @@ const Index = () => {
     // Add quantum event to session log
     setSessionLog(prev => [...prev, {
       timestamp: Date.now(),
-      stateLabel: `${focusState} - Quantum Event`,
+      stateLabel: focusState, // Use focusState directly to match SessionLogEntry type
       vibrationalCoherence: drrState?.vibrationalCoherence || 0,
       spectralPhaseStability: drrState?.spectralPhaseStability || 0,
       breathCoherence,
