@@ -10,6 +10,9 @@ import FloatingHelp from '../components/FloatingHelp';
 import ConsciousnessCompass from '../components/ConsciousnessCompass';
 import QuantumCoherenceDetector from '../components/QuantumCoherenceDetector';
 import BiorhythmSynchronizer from '../components/BiorhythmSynchronizer';
+import EnhancedVisualEffects from '../components/EnhancedVisualEffects';
+import ConsciousnessStatusBar from '../components/ConsciousnessStatusBar';
+import SacredGeometryOverlay from '../components/SacredGeometryOverlay';
 import { useStateHandlers } from '../hooks/useStateHandlers';
 import { useSessionManager } from '../components/SessionManager';
 import { FocusState, DRRNode, DRREngineState, AudioConfig, CreativeFlowState, IntuitiveForesightState, SessionLogEntry, Focus15State } from '../types/focus';
@@ -104,6 +107,19 @@ const Index = () => {
     <ResponsiveLayout>
       <Header />
       
+      {/* Enhanced Visual Layers */}
+      <SacredGeometryOverlay 
+        focusState={focusState}
+        isActive={isActive}
+        drrState={drrState}
+      />
+      
+      <EnhancedVisualEffects
+        focusState={focusState}
+        isActive={isActive}
+        drrState={drrState}
+      />
+      
       <MainCanvas
         resonanceNodes={resonanceNodes}
         focusState={focusState}
@@ -143,6 +159,14 @@ const Index = () => {
         drrState={drrState}
         breathCoherence={breathCoherence}
         isActive={isActive}
+      />
+      
+      {/* Enhanced Status Bar */}
+      <ConsciousnessStatusBar
+        focusState={focusState}
+        isActive={isActive}
+        breathCoherence={breathCoherence}
+        drrState={drrState}
       />
       
       {/* Mobile Controls */}
