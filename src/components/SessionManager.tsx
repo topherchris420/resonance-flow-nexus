@@ -12,6 +12,7 @@ interface SessionManagerProps {
   setFocusState: (state: FocusState) => void;
   setSessionLog: (updater: (prev: SessionLogEntry[]) => SessionLogEntry[]) => void;
   setFocus15State: (state: any) => void;
+  setShowAAR: (show: boolean) => void;
 }
 
 export const useSessionManager = ({
@@ -23,7 +24,8 @@ export const useSessionManager = ({
   setIsActive,
   setFocusState,
   setSessionLog,
-  setFocus15State
+  setFocus15State,
+  setShowAAR
 }: SessionManagerProps) => {
   const sessionStartTimeRef = useRef<number>(0);
 
@@ -55,11 +57,15 @@ export const useSessionManager = ({
             nodes: resonanceNodes,
             mandalaComplexity: resonanceNodes.length,
             goldenRatioAlignment: drrState.goldenRatioAlignment
-          }
+          },
+          cognitivePerformance: Math.random(), // Placeholder
+          stressRegulation: Math.random() // Placeholder
         };
         
+        // TODO: Encrypt session log before storing
         setSessionLog(prev => [...prev, finalEntry]);
       }
+      setShowAAR(true);
     }
   };
 
