@@ -1,5 +1,5 @@
 
-export type FocusState = 'Focus 12' | 'Focus 15' | 'Focus 21';
+export type FocusState = 'Focus 12' | 'Focus 15' | 'Focus 21' | 'CRL-T' | 'CRL-M' | 'CRL-P';
 
 export interface DRRNode {
   id: string;
@@ -41,6 +41,8 @@ export interface SessionLogEntry {
     mandalaComplexity: number;
     goldenRatioAlignment: number;
   };
+  cognitivePerformance?: number;
+  stressRegulation?: number;
 }
 
 export interface AtemporalEvent {
@@ -81,6 +83,7 @@ export interface DRREngineState {
   timeCollapseActive: boolean;
   resonanceMemory: DRRNode[];
   stabilityDuration: number;
+  heartRate?: number;
 }
 
 export interface CreativeFlowState {

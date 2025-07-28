@@ -1,5 +1,6 @@
 import React, { useEffect, useImperativeHandle, forwardRef, useRef, useState } from 'react';
 import { FocusState, DRRNode, AudioConfig, DRREngineState, CreativeFlowState, Focus15State } from '../types/focus';
+import { tacticalCues } from '../utils/tactical-cues';
 
 interface AudioEngineProps {
   focusState: FocusState;
@@ -26,6 +27,19 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
   onFocusTransition,
   onBreathCoherenceUpdate
 }, ref) => {
+  useEffect(() => {
+    if (isActive && focusState === 'CRL-T') {
+      const interval = setInterval(() => {
+        if (Math.random() < 0.2) {
+          tacticalCues.subtleBeep();
+        }
+        if (Math.random() < 0.1) {
+          tacticalCues.sharpeningPulse();
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isActive, focusState]);
   const audioContextRef = useRef<AudioContext | null>(null);
   const leftOscillatorRef = useRef<OscillatorNode | null>(null);
   const rightOscillatorRef = useRef<OscillatorNode | null>(null);

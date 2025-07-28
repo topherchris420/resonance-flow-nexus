@@ -2,7 +2,7 @@
 import React from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { Menu, Play, Pause, Mic, MicOff, Sparkles, Zap, Waves } from 'lucide-react';
+import { Menu, Play, Pause, Mic, MicOff, Sparkles, Zap, Waves, Crosshair, MemoryStick, ScanLine } from 'lucide-react';
 import { FocusState } from '@/types/focus';
 
 interface MobileControlsProps {
@@ -22,13 +22,16 @@ const MobileControls: React.FC<MobileControlsProps> = ({
   onToggleMicrophone,
   onFocusTransition
 }) => {
-  const focusStates: FocusState[] = ['Focus 12', 'Focus 15', 'Focus 21'];
+  const focusStates: FocusState[] = ['Focus 12', 'Focus 15', 'Focus 21', 'CRL-T', 'CRL-M', 'CRL-P'];
 
   const getFocusDescription = (state: FocusState) => {
     switch (state) {
       case 'Focus 12': return 'Relaxed awareness & light meditation';
       case 'Focus 15': return 'Deep states & time perception shifts';
       case 'Focus 21': return 'Advanced cognitive readiness training';
+      case 'CRL-T': return 'Tactical focus for high-stress environments';
+      case 'CRL-M': return 'Memory retention drills';
+      case 'CRL-P': return 'Pattern recognition exercises';
       default: return '';
     }
   };
@@ -38,6 +41,9 @@ const MobileControls: React.FC<MobileControlsProps> = ({
       case 'Focus 12': return <Waves className="w-5 h-5 text-blue-400" />;
       case 'Focus 15': return <Zap className="w-5 h-5 text-purple-400" />;
       case 'Focus 21': return <Sparkles className="w-5 h-5 text-yellow-400" />;
+      case 'CRL-T': return <Crosshair className="w-5 h-5 text-red-400" />;
+      case 'CRL-M': return <MemoryStick className="w-5 h-5 text-green-400" />;
+      case 'CRL-P': return <ScanLine className="w-5 h-5 text-indigo-400" />;
       default: return <Waves className="w-5 h-5" />;
     }
   };

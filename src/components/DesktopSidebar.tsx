@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Play, Pause, Mic, MicOff, Sparkles, Brain, Waves, Zap, Activity, Eye } from 'lucide-react';
+import { Play, Pause, Mic, MicOff, Sparkles, Brain, Waves, Zap, Activity, Eye, Crosshair, AlertTriangle, Shield, ShieldOff, MemoryStick, ScanLine, Users } from 'lucide-react';
 import { FocusState, DRREngineState, CreativeFlowState, IntuitiveForesightState } from '@/types/focus';
 
 interface DesktopSidebarProps {
@@ -16,6 +16,10 @@ interface DesktopSidebarProps {
   onToggleSession: () => void;
   onToggleMicrophone: () => void;
   onFocusTransition: (state: FocusState) => void;
+  onToggleStressInoculation: () => void;
+  stressInoculationActive: boolean;
+  onToggleTeamCoherence: () => void;
+  teamCoherenceActive: boolean;
 }
 
 const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
@@ -28,15 +32,22 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
   intuitiveForesightState,
   onToggleSession,
   onToggleMicrophone,
-  onFocusTransition
+  onFocusTransition,
+  onToggleStressInoculation,
+  stressInoculationActive,
+  onToggleTeamCoherence,
+  teamCoherenceActive
 }) => {
-  const focusStates: FocusState[] = ['Focus 12', 'Focus 15', 'Focus 21'];
+  const focusStates: FocusState[] = ['Focus 12', 'Focus 15', 'Focus 21', 'CRL-T', 'CRL-M', 'CRL-P'];
 
   const getFocusDescription = (state: FocusState) => {
     switch (state) {
       case 'Focus 12': return 'Relaxed awareness & light meditation';
       case 'Focus 15': return 'Deep states & time perception shifts';
       case 'Focus 21': return 'Advanced cognitive readiness training';
+      case 'CRL-T': return 'Tactical focus for high-stress environments';
+      case 'CRL-M': return 'Memory retention drills';
+      case 'CRL-P': return 'Pattern recognition exercises';
       default: return '';
     }
   };
@@ -46,6 +57,9 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
       case 'Focus 12': return <Waves className="w-5 h-5 text-blue-400" />;
       case 'Focus 15': return <Zap className="w-5 h-5 text-purple-400" />;
       case 'Focus 21': return <Sparkles className="w-5 h-5 text-yellow-400" />;
+      case 'CRL-T': return <Crosshair className="w-5 h-5 text-red-400" />;
+      case 'CRL-M': return <MemoryStick className="w-5 h-5 text-green-400" />;
+      case 'CRL-P': return <ScanLine className="w-5 h-5 text-indigo-400" />;
       default: return <Waves className="w-5 h-5" />;
     }
   };
@@ -104,6 +118,62 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
             </div>
             <span className="font-semibold">{micEnabled ? 'Microphone Active' : 'Enable Microphone'}</span>
             {micEnabled && <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse ml-auto"></div>}
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-gradient-to-br from-white/10 to-white/5 border-white/20 shadow-xl backdrop-blur-sm">
+        <CardHeader>
+          <CardTitle className="text-white text-xl flex items-center space-x-3">
+            <div className="p-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg">
+              <Users className="w-6 h-6 text-blue-400" />
+            </div>
+            <span>Team Coherence</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Button
+            onClick={onToggleTeamCoherence}
+            variant="outline"
+            className={`w-full flex items-center space-x-3 border-white/30 transition-all duration-300 transform hover:scale-[1.02] shadow-lg text-base py-6 ${
+              teamCoherenceActive
+                ? 'bg-gradient-to-r from-blue-500/30 to-purple-500/30 text-blue-300 hover:from-blue-500/40 hover:to-purple-500/40 ring-2 ring-blue-500/30'
+                : 'bg-white/10 text-white hover:bg-white/20'
+            }`}
+          >
+            <div className="p-2 bg-white/10 rounded-lg">
+              {teamCoherenceActive ? <Users className="w-5 h-5 text-red-400" /> : <Users className="w-5 h-5" />}
+            </div>
+            <span className="font-semibold">{teamCoherenceActive ? 'Deactivate' : 'Activate'}</span>
+            {teamCoherenceActive && <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse ml-auto"></div>}
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-gradient-to-br from-white/10 to-white/5 border-white/20 shadow-xl backdrop-blur-sm">
+        <CardHeader>
+          <CardTitle className="text-white text-xl flex items-center space-x-3">
+            <div className="p-2 bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-lg">
+              <AlertTriangle className="w-6 h-6 text-red-400" />
+            </div>
+            <span>Stress Inoculation</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Button
+            onClick={onToggleStressInoculation}
+            variant="outline"
+            className={`w-full flex items-center space-x-3 border-white/30 transition-all duration-300 transform hover:scale-[1.02] shadow-lg text-base py-6 ${
+              stressInoculationActive
+                ? 'bg-gradient-to-r from-red-500/30 to-orange-500/30 text-red-300 hover:from-red-500/40 hover:to-orange-500/40 ring-2 ring-red-500/30'
+                : 'bg-white/10 text-white hover:bg-white/20'
+            }`}
+          >
+            <div className="p-2 bg-white/10 rounded-lg">
+              {stressInoculationActive ? <ShieldOff className="w-5 h-5" /> : <Shield className="w-5 h-5" />}
+            </div>
+            <span className="font-semibold">{stressInoculationActive ? 'Deactivate' : 'Activate'}</span>
+            {stressInoculationActive && <div className="w-3 h-3 bg-red-400 rounded-full animate-pulse ml-auto"></div>}
           </Button>
         </CardContent>
       </Card>

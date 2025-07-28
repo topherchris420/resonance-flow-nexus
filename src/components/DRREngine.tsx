@@ -18,6 +18,7 @@ interface DRREngineProps {
   onFocus15StateUpdate: (state: Focus15State) => void;
 }
 
+// All data processing happens locally on the device. No data is transmitted to the cloud.
 const DRREngine: React.FC<DRREngineProps> = ({
   isActive,
   micEnabled,
@@ -75,6 +76,21 @@ const DRREngine: React.FC<DRREngineProps> = ({
     convergenceDetected: false,
     goldenSpiralNodes: []
   });
+
+  const [heartRate, setHeartRate] = useState(60);
+
+  useEffect(() => {
+    if (!isActive) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      // Placeholder for wearable sensor data
+      setHeartRate(60 + Math.random() * 10);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isActive]);
 
   const updateCreativeFlow = useCallback((vibrationalCoherence: number, timestamp: number) => {
     const shouldInjectDissonance = timestamp > creativeFlow.nextInjectionTime && 
@@ -198,7 +214,8 @@ const DRREngine: React.FC<DRREngineProps> = ({
       varianceHistory: getVarianceHistory(),
       timeCollapseActive: timeCollapseTriggered || drrState.timeCollapseActive,
       resonanceMemory: updatedResonanceMemory,
-      stabilityDuration
+      stabilityDuration,
+      heartRate
     };
     
     setDrrState(newDrrState);
