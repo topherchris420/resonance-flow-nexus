@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Play, Pause, Mic, MicOff, Sparkles, Brain, Waves, Zap, Activity, Eye, Crosshair, AlertTriangle, Shield, ShieldOff, MemoryStick, ScanLine, Users, UsersOff } from 'lucide-react';
+import { Play, Pause, Mic, MicOff, Sparkles, Brain, Waves, Zap, Activity, Eye, Crosshair, AlertTriangle, Shield, ShieldOff, MemoryStick, ScanLine, Users } from 'lucide-react';
 import { FocusState, DRREngineState, CreativeFlowState, IntuitiveForesightState } from '@/types/focus';
 
 interface DesktopSidebarProps {
@@ -142,7 +142,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
             }`}
           >
             <div className="p-2 bg-white/10 rounded-lg">
-              {teamCoherenceActive ? <UsersOff className="w-5 h-5" /> : <Users className="w-5 h-5" />}
+              {teamCoherenceActive ? <Users className="w-5 h-5 text-red-400" /> : <Users className="w-5 h-5" />}
             </div>
             <span className="font-semibold">{teamCoherenceActive ? 'Deactivate' : 'Activate'}</span>
             {teamCoherenceActive && <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse ml-auto"></div>}
