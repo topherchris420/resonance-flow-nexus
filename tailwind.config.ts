@@ -62,14 +62,14 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				consciousness: {
-					'focus-12': 'hsl(var(--focus-12))',
-					'focus-15': 'hsl(var(--focus-15))',
-					'focus-21': 'hsl(var(--focus-21))',
+				readiness: {
+					'crl-1': 'hsl(var(--crl-1))',
+					'crl-2': 'hsl(var(--crl-2))',
+					'crl-3': 'hsl(var(--crl-3))',
 					'drr': 'hsl(var(--drr-active))',
 					'quantum': 'hsl(var(--quantum-coherence))',
-					'mandala': 'hsl(var(--mandala-primary))',
-					'sacred': 'hsl(var(--mandala-secondary))',
+					'display-primary': 'hsl(var(--display-primary))',
+					'display-secondary': 'hsl(var(--display-secondary))',
 					'golden': 'hsl(var(--golden-ratio))'
 				}
 			},
@@ -95,7 +95,7 @@ export default {
 						height: '0'
 					}
 				},
-				'consciousness-pulse': {
+				'readiness-pulse': {
 					'0%, 100%': {
 						opacity: '0.7',
 						transform: 'scale(1)'
@@ -113,7 +113,7 @@ export default {
 						transform: 'rotate(360deg)'
 					}
 				},
-				'mandala-expand': {
+				'display-expand': {
 					'0%': {
 						transform: 'scale(0.8) rotate(0deg)',
 						opacity: '0.5'
@@ -139,19 +139,19 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'consciousness-pulse': 'consciousness-pulse 3s ease-in-out infinite',
+				'readiness-pulse': 'readiness-pulse 3s ease-in-out infinite',
 				'sacred-rotation': 'sacred-rotation 20s linear infinite',
-				'mandala-expand': 'mandala-expand 6s ease-in-out infinite',
+				'display-expand': 'display-expand 6s ease-in-out infinite',
 				'quantum-shimmer': 'quantum-shimmer 4s ease-in-out infinite'
 			},
 			backgroundImage: {
-				'consciousness': 'var(--gradient-consciousness)',
+				'readiness': 'var(--gradient-readiness)',
 				'focus': 'var(--gradient-focus)',
 				'sacred': 'var(--gradient-sacred)',
 				'void': 'var(--gradient-void)'
 			},
 			boxShadow: {
-				'consciousness': 'var(--shadow-consciousness)',
+				'readiness': 'var(--shadow-readiness)',
 				'sacred': 'var(--shadow-sacred)',
 				'void': 'var(--shadow-void)'
 			}

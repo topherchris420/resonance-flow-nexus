@@ -36,26 +36,26 @@
 
     --radius: 0.5rem;
     
-    /* Enhanced gradients and consciousness-themed colors */
-    --gradient-consciousness: linear-gradient(135deg, hsl(240 100% 20%), hsl(260 100% 40%), hsl(280 100% 60%));
-    --gradient-focus: linear-gradient(135deg, hsl(200 100% 30%), hsl(220 100% 50%), hsl(240 100% 70%));
-    --gradient-sacred: linear-gradient(135deg, hsl(280 100% 30%), hsl(300 100% 50%), hsl(320 100% 70%));
-    --gradient-void: linear-gradient(135deg, hsl(0 0% 5%), hsl(240 30% 10%), hsl(260 50% 15%));
+    /* Enhanced gradients and readiness-themed colors */
+    --gradient-readiness: linear-gradient(135deg, hsl(210 20% 20%), hsl(210 25% 30%), hsl(210 30% 40%));
+    --gradient-focus: linear-gradient(135deg, hsl(180 20% 30%), hsl(180 25% 40%), hsl(180 30% 50%));
+    --gradient-sacred: linear-gradient(135deg, hsl(210 20% 30%), hsl(210 25% 40%), hsl(210 30% 50%));
+    --gradient-void: linear-gradient(135deg, hsl(0 0% 5%), hsl(210 10% 10%), hsl(210 15% 15%));
     
-    /* Consciousness states */
-    --focus-12: 200 100% 50%;
-    --focus-15: 45 100% 50%;
-    --focus-21: 280 100% 60%;
-    --drr-active: 120 100% 40%;
-    --quantum-coherence: 300 100% 70%;
+    /* Cognitive Readiness Levels */
+    --crl-1: 180 25% 50%;
+    --crl-2: 210 25% 50%;
+    --crl-3: 240 25% 50%;
+    --drr-active: 150 100% 40%;
+    --quantum-coherence: 210 100% 70%;
     
-    /* Sacred geometry colors */
-    --mandala-primary: 240 100% 60%;
-    --mandala-secondary: 280 100% 50%;
+    /* Tactical display colors */
+    --display-primary: 210 25% 60%;
+    --display-secondary: 180 25% 50%;
     --golden-ratio: 45 100% 55%;
     
     /* Enhanced shadows */
-    --shadow-consciousness: 0 20px 60px -10px hsl(var(--mandala-primary) / 0.4);
+    --shadow-readiness: 0 20px 60px -10px hsl(var(--display-primary) / 0.4);
     --shadow-sacred: 0 10px 40px -5px hsl(var(--golden-ratio) / 0.3);
     --shadow-void: 0 30px 80px -15px hsl(0 0% 0% / 0.8);
 
@@ -105,8 +105,8 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
     
-    /* Enhanced dark mode consciousness colors */
-    --gradient-consciousness: linear-gradient(135deg, hsl(240 80% 15%), hsl(260 90% 25%), hsl(280 100% 35%));
+    /* Enhanced dark mode readiness colors */
+    --gradient-readiness: linear-gradient(135deg, hsl(210 20% 15%), hsl(210 25% 25%), hsl(210 30% 35%));
     --gradient-focus: linear-gradient(135deg, hsl(200 80% 20%), hsl(220 90% 30%), hsl(240 100% 40%));
     --gradient-sacred: linear-gradient(135deg, hsl(280 80% 20%), hsl(300 90% 30%), hsl(320 100% 40%));
     --gradient-void: linear-gradient(135deg, hsl(0 0% 2%), hsl(240 50% 5%), hsl(260 70% 8%));

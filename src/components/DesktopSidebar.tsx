@@ -36,7 +36,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
     switch (state) {
       case 'Focus 12': return 'Relaxed awareness & light meditation';
       case 'Focus 15': return 'Deep states & time perception shifts';
-      case 'Focus 21': return 'Advanced consciousness exploration';
+      case 'Focus 21': return 'Advanced cognitive readiness training';
       default: return '';
     }
   };

@@ -10,9 +10,9 @@ const FloatingHelp: React.FC = () => {
   const tips = [
     {
       icon: <Play className="w-6 h-6 text-green-400" />,
-      title: "Start Your Journey",
-      description: "Click the play button to begin your consciousness exploration experience",
-      highlight: "Begin with Focus 12 for beginners"
+      title: "Start Your Drill",
+      description: "Click the play button to begin your cognitive readiness training drill",
+      highlight: "Begin with CRL-1 for beginners"
     },
     {
       icon: <Mic className="w-6 h-6 text-blue-400" />,
@@ -22,9 +22,9 @@ const FloatingHelp: React.FC = () => {
     },
     {
       icon: <Brain className="w-6 h-6 text-purple-400" />,
-      title: "Choose Your State",
-      description: "Select Focus 12, 15, or 21 based on your experience level and desired depth",
-      highlight: "Each state offers unique benefits"
+      title: "Choose Your CRL",
+      description: "Select a CRL based on your experience level and desired depth",
+      highlight: "Each CRL offers unique benefits"
     },
     {
       icon: <Headphones className="w-6 h-6 text-yellow-400" />,
