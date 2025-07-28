@@ -28,7 +28,7 @@ const MobileControls: React.FC<MobileControlsProps> = ({
     switch (state) {
       case 'Focus 12': return 'Relaxed awareness & light meditation';
       case 'Focus 15': return 'Deep states & time perception shifts';
-      case 'Focus 21': return 'Advanced consciousness exploration';
+      case 'Focus 21': return 'Advanced cognitive readiness training';
       default: return '';
     }
   };
@@ -93,7 +93,7 @@ const MobileControls: React.FC<MobileControlsProps> = ({
                   <span>Choose Your Focus State</span>
                 </div>
               </SheetTitle>
-              <p className="text-white/70 text-sm">Each state offers unique consciousness exploration experiences</p>
+              <p className="text-white/70 text-sm">Each state offers unique cognitive readiness training experiences</p>
             </SheetHeader>
             <div className="grid gap-4 py-4">
               {focusStates.map((state) => (

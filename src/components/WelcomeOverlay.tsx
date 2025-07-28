@@ -16,18 +16,18 @@ const WelcomeOverlay: React.FC<WelcomeOverlayProps> = ({ onStart, onClose }) => 
   const steps = [
     {
       icon: <Brain className="w-16 h-16 text-blue-400" />,
-      title: "Welcome to Hello",
-      description: "Your personal gateway to deeper consciousness using advanced binaural beats and DRR (Dynamic Resonance Response) technology.",
-      highlight: "Experience profound states of awareness",
-      details: "Scientifically designed to guide you through Focus 12, 15, and 21 states",
+      title: "Welcome to Project Sentinel",
+      description: "Your personal gateway to enhanced cognitive performance using advanced binaural beats and DRR (Dynamic Resonance Response) technology.",
+      highlight: "Experience profound states of readiness",
+      details: "Scientifically designed to guide you through CRLs (Cognitive Readiness Levels)",
       gradient: "from-blue-500/20 to-purple-500/20"
     },
     {
       icon: <Waves className="w-16 h-16 text-purple-400" />,
       title: "How It Works",
-      description: "Choose your focus state and let our DRR Engine create personalized resonance patterns that adapt to your breathing and brainwave activity.",
+      description: "Choose your CRL and let our DRR Engine create personalized resonance patterns that adapt to your breathing and brainwave activity.",
       highlight: "AI-powered personalization",
-      details: "Each session is unique and tailored to your current state",
+      details: "Each evolution is unique and tailored to your current state",
       gradient: "from-purple-500/20 to-pink-500/20"
     },
     {
@@ -41,9 +41,9 @@ const WelcomeOverlay: React.FC<WelcomeOverlayProps> = ({ onStart, onClose }) => 
     {
       icon: <Sparkles className="w-16 h-16 text-yellow-400" />,
       title: "Ready to Begin",
-      description: "Start with Focus 12 for relaxed awareness, or choose Focus 15/21 for deeper explorative states. Your journey into expanded consciousness begins now.",
+      description: "Start with CRL-1 for relaxed awareness, or choose higher CRLs for more demanding cognitive drills. Your journey to peak performance begins now.",
       highlight: "Your transformation awaits",
-      details: "Each state offers unique benefits and experiences",
+      details: "Each CRL offers unique benefits and experiences",
       gradient: "from-yellow-500/20 to-orange-500/20"
     }
   ];

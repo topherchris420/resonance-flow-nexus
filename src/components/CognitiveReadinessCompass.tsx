@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { DRREngineState, Focus15State } from '@/types/focus';
 import { Compass, Navigation, Target, Zap } from 'lucide-react';
 
-interface ConsciousnessCompassProps {
+interface CognitiveReadinessCompassProps {
   drrState?: DRREngineState;
   focus15State?: Focus15State;
   isActive: boolean;
 }
 
-const ConsciousnessCompass: React.FC<ConsciousnessCompassProps> = ({
+const CognitiveReadinessCompass: React.FC<CognitiveReadinessCompassProps> = ({
   drrState,
   focus15State,
   isActive
@@ -21,7 +21,7 @@ const ConsciousnessCompass: React.FC<ConsciousnessCompassProps> = ({
   useEffect(() => {
     if (!isActive || !drrState) return;
 
-    // Calculate consciousness direction based on multiple metrics
+    // Calculate cognitive readiness direction based on multiple metrics
     const vibrationalWeight = drrState.vibrationalCoherence * 120;
     const phaseWeight = drrState.spectralPhaseStability * 90;
     const goldenWeight = drrState.goldenRatioAlignment * 150;
@@ -69,7 +69,7 @@ const ConsciousnessCompass: React.FC<ConsciousnessCompassProps> = ({
       <div className="bg-black/70 backdrop-blur-lg rounded-2xl p-4 border border-white/20 shadow-2xl">
         <div className="flex items-center space-x-3 mb-3">
           <Compass className="w-5 h-5 text-purple-400" />
-          <span className="text-white text-sm font-medium">Consciousness Compass</span>
+          <span className="text-white text-sm font-medium">Cognitive Readiness Compass</span>
         </div>
         
         {/* Main Compass */}
@@ -149,4 +149,4 @@ const ConsciousnessCompass: React.FC<ConsciousnessCompassProps> = ({
   );
 };
 
-export default ConsciousnessCompass;
+export default CognitiveReadinessCompass;

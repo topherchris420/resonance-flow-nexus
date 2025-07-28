@@ -7,11 +7,11 @@ import MobileControls from '../components/MobileControls';
 import DesktopSidebar from '../components/DesktopSidebar';
 import WelcomeOverlay from '../components/WelcomeOverlay';
 import FloatingHelp from '../components/FloatingHelp';
-import ConsciousnessCompass from '../components/ConsciousnessCompass';
+import CognitiveReadinessCompass from '../components/CognitiveReadinessCompass';
 import QuantumCoherenceDetector from '../components/QuantumCoherenceDetector';
 import BiorhythmSynchronizer from '../components/BiorhythmSynchronizer';
 import EnhancedVisualEffects from '../components/EnhancedVisualEffects';
-import ConsciousnessStatusBar from '../components/ConsciousnessStatusBar';
+import CognitiveReadinessStatusBar from '../components/CognitiveReadinessStatusBar';
 import SacredGeometryOverlay from '../components/SacredGeometryOverlay';
 import { useStateHandlers } from '../hooks/useStateHandlers';
 import { useSessionManager } from '../components/SessionManager';
@@ -143,7 +143,7 @@ const Index = () => {
       />
       
       {/* Enhanced Consciousness Widgets */}
-      <ConsciousnessCompass
+      <CognitiveReadinessCompass
         drrState={drrState}
         focus15State={focus15State}
         isActive={isActive}
@@ -162,7 +162,7 @@ const Index = () => {
       />
       
       {/* Enhanced Status Bar */}
-      <ConsciousnessStatusBar
+      <CognitiveReadinessStatusBar
         focusState={focusState}
         isActive={isActive}
         breathCoherence={breathCoherence}

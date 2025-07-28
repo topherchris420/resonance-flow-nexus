@@ -70,7 +70,7 @@ const EnhancedVisualEffects: React.FC<EnhancedVisualEffectsProps> = ({
         particle.y += particle.vy;
         particle.life++;
 
-        // Apply consciousness field effect
+        // Apply readiness field effect
         if (drrState?.harmonicConvergence) {
           const centerX = canvas.width / 2;
           const centerY = canvas.height / 2;
