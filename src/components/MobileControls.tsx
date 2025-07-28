@@ -54,41 +54,37 @@ const MobileControls: React.FC<MobileControlsProps> = ({
         <Button
           onClick={onToggleSession}
           variant="outline"
-          size="sm"
-          className={`flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 shadow-lg ${
-            isActive 
-              ? 'bg-gradient-to-r from-red-500/30 to-pink-500/30 border-red-400/50 text-red-300 hover:from-red-500/40 hover:to-pink-500/40' 
-              : 'bg-gradient-to-r from-green-500/30 to-emerald-500/30 border-green-400/50 text-green-300 hover:from-green-500/40 hover:to-emerald-500/40'
+          size="lg"
+          className={`flex items-center justify-center w-16 h-16 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg ${
+            isActive
+              ? 'bg-red-500/30 border-red-400/50 text-red-300'
+              : 'bg-green-500/30 border-green-400/50 text-green-300'
           }`}
         >
-          {isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-          <span className="font-medium">{isActive ? 'Pause' : 'Begin'}</span>
-          {!isActive && <Sparkles className="w-3 h-3 animate-pulse" />}
+          {isActive ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8" />}
         </Button>
 
         <Button
           onClick={onToggleMicrophone}
           variant="outline"
-          size="sm"
-          className={`flex items-center space-x-2 border-white/30 transition-all duration-300 transform hover:scale-105 shadow-lg ${
-            micEnabled 
-              ? 'bg-gradient-to-r from-blue-500/30 to-cyan-500/30 text-blue-300 hover:from-blue-500/40 hover:to-cyan-500/40 ring-2 ring-blue-500/30' 
-              : 'bg-white/10 text-white hover:bg-white/20'
+          size="lg"
+          className={`flex items-center justify-center w-16 h-16 rounded-full border-white/30 transition-all duration-300 transform hover:scale-105 shadow-lg ${
+            micEnabled
+              ? 'bg-blue-500/30 text-blue-300'
+              : 'bg-white/10 text-white'
           }`}
         >
-          {micEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
-          <span className="text-xs">{micEnabled ? 'Active' : 'Enable'}</span>
+          {micEnabled ? <Mic className="w-8 h-8" /> : <MicOff className="w-8 h-8" />}
         </Button>
 
         <Sheet>
           <SheetTrigger asChild>
             <Button
               variant="outline"
-              size="sm"
-              className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-400/40 text-purple-300 hover:from-purple-500/30 hover:to-pink-500/30 relative transform hover:scale-105 transition-all duration-300 shadow-lg"
+              size="lg"
+              className="bg-purple-500/20 border-purple-400/40 text-purple-300 w-16 h-16 rounded-full relative transform hover:scale-105 transition-all duration-300 shadow-lg"
             >
-              <Menu className="w-4 h-4" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-pulse"></div>
+              <Menu className="w-8 h-8" />
             </Button>
           </SheetTrigger>
           <SheetContent side="bottom" className="bg-gradient-to-t from-black/98 to-gray-900/95 border-white/20 backdrop-blur-lg">
