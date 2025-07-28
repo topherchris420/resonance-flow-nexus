@@ -42,12 +42,12 @@ const CognitiveTest: React.FC<CognitiveTestProps> = ({ isActive, focusState, onT
   if (!testData) return null;
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 p-8 rounded-lg text-white">
-      <h2 className="text-2xl mb-4">Cognitive Test</h2>
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 p-8 rounded-lg text-white w-full max-w-md">
+      <h2 className="text-2xl mb-4 text-center">Cognitive Test</h2>
       {testData.type === 'memory' && (
-        <div>
+        <div className="text-center">
           <p className="mb-4">Memorize the following sequence:</p>
-          <p className="text-4xl font-bold mb-4">{testData.sequence.join(' ')}</p>
+          <p className="text-4xl font-bold mb-4 tracking-widest">{testData.sequence.join(' ')}</p>
           <input
             type="text"
             className="bg-transparent border-b-2 border-white text-center text-2xl w-full"
@@ -56,9 +56,9 @@ const CognitiveTest: React.FC<CognitiveTestProps> = ({ isActive, focusState, onT
         </div>
       )}
       {testData.type === 'pattern' && (
-        <div>
+        <div className="text-center">
           <p className="mb-4">What is the next number in the sequence?</p>
-          <p className="text-4xl font-bold mb-4">{testData.sequence.join(' ')} __</p>
+          <p className="text-4xl font-bold mb-4 tracking-widest">{testData.sequence.join(' ')} __</p>
           <input
             type="text"
             className="bg-transparent border-b-2 border-white text-center text-2xl w-full"
@@ -67,7 +67,7 @@ const CognitiveTest: React.FC<CognitiveTestProps> = ({ isActive, focusState, onT
         </div>
       )}
       <button
-        className="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
         onClick={handleAnswer}
       >
         Submit
