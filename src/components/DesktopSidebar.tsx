@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Play, Pause, Mic, MicOff, Sparkles, Brain, Waves, Zap, Activity, Eye, Crosshair, AlertTriangle, Shield, ShieldOff, MemoryStick, ScanLine, Users, ChevronLeft, ChevronRight } from 'lucide-react';
