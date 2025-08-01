@@ -12,6 +12,10 @@ interface MobileControlsProps {
   onToggleSession: () => void;
   onToggleMicrophone: () => void;
   onFocusTransition: (state: FocusState) => void;
+  onToggleStressInoculation?: () => void;
+  stressInoculationActive?: boolean;
+  onToggleTeamCoherence?: () => void;
+  teamCoherenceActive?: boolean;
 }
 
 const MobileControls: React.FC<MobileControlsProps> = ({

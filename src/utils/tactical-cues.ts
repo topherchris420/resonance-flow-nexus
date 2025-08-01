@@ -1,6 +1,6 @@
 export const tacticalCues = {
   subtleBeep: () => {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
 
@@ -16,7 +16,7 @@ export const tacticalCues = {
     oscillator.stop(audioContext.currentTime + 0.5);
   },
   sharpeningPulse: () => {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
 

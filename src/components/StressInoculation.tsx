@@ -44,15 +44,24 @@ const StressInoculation: React.FC<StressInoculationProps> = ({ isActive, drrStat
           />
 
           {/* Audio cues */}
-          {conflictSounds.map((sound, index) => (
-            <audio
-              key={index}
-              src={sound}
-              autoPlay
-              loop
-              volume={intensity * 0.5}
-            />
-          ))}
+          {conflictSounds.map((sound, index) => {
+            const audioRef = React.useRef<HTMLAudioElement>(null);
+            React.useEffect(() => {
+              if (audioRef.current) {
+                audioRef.current.volume = intensity * 0.5;
+              }
+            }, [intensity]);
+            
+            return (
+              <audio
+                key={index}
+                ref={audioRef}
+                src={sound}
+                autoPlay
+                loop
+              />
+            );
+          })}
         </>
       )}
     </div>

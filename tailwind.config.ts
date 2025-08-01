@@ -134,6 +134,24 @@ export default {
 					'50%': {
 						backgroundPosition: '100% 50%'
 					}
+				},
+				'consciousness-glow': {
+					'0%, 100%': {
+						transform: 'scale(1)',
+						opacity: '0.8'
+					},
+					'50%': {
+						transform: 'scale(1.05)',
+						opacity: '1'
+					}
+				},
+				'float': {
+					'0%, 100%': {
+						transform: 'translateY(0px)'
+					},
+					'50%': {
+						transform: 'translateY(-10px)'
+					}
 				}
 			},
 			animation: {
@@ -142,7 +160,9 @@ export default {
 				'readiness-pulse': 'readiness-pulse 3s ease-in-out infinite',
 				'sacred-rotation': 'sacred-rotation 20s linear infinite',
 				'display-expand': 'display-expand 6s ease-in-out infinite',
-				'quantum-shimmer': 'quantum-shimmer 4s ease-in-out infinite'
+				'quantum-shimmer': 'quantum-shimmer 4s ease-in-out infinite',
+				'consciousness-glow': 'consciousness-glow 4s ease-in-out infinite',
+				'float': 'float 6s ease-in-out infinite'
 			},
 			backgroundImage: {
 				'readiness': 'var(--gradient-readiness)',

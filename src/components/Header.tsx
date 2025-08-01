@@ -8,16 +8,16 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ title = "Project Sentinel" }) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-void backdrop-blur-xl 
-                      border-b border-readiness-display-primary/30 shadow-readiness">
+                      border-b border-readiness-quantum/40 shadow-sacred">
       <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
         <div className="flex items-center space-x-4">
           <div className="relative group">
             <img 
-              src="/sentinel_logo.svg"
-              alt="Sentinel Logo"
-              className="w-12 h-12 rounded-full object-cover ring-2 ring-readiness-display-primary/60
-                         shadow-sacred transition-all duration-500 group-hover:ring-readiness-quantum/80
-                         group-hover:scale-110 animate-readiness-pulse"
+              src="/lovable-uploads/e5b686f9-ff1e-4506-bab4-1bb5e2bb3d01.png"
+              alt="Meditation Consciousness Logo"
+              className="w-14 h-14 rounded-full object-cover ring-2 ring-readiness-quantum/70
+                         shadow-sacred transition-all duration-700 group-hover:ring-readiness-golden/90
+                         group-hover:scale-125 animate-consciousness-glow backdrop-blur-sm"
             />
             <div className="absolute -top-1 -right-1 w-4 h-4 bg-readiness-drr rounded-full
                             animate-readiness-pulse shadow-sacred"></div>
@@ -25,9 +25,9 @@ const Header: React.FC<HeaderProps> = ({ title = "Project Sentinel" }) => {
                             group-hover:opacity-30 transition-opacity duration-500"></div>
           </div>
           <div className="flex flex-col">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-readiness-quantum
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-white via-readiness-quantum
                            to-readiness-golden bg-clip-text text-transparent tracking-wide
-                           drop-shadow-lg">
+                           drop-shadow-2xl animate-float">
               {title}
             </h1>
             <div className="flex items-center space-x-2">
