@@ -138,6 +138,7 @@ const Index = () => {
         focusState={focusState}
         isActive={isActive}
         micEnabled={micEnabled}
+        audioStream={audioStream}
         breathCoherence={breathCoherence}
         drrState={drrState}
         audioConfig={audioConfig}
