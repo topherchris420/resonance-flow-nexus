@@ -13,6 +13,7 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({ children, className
       "min-h-screen bg-black text-white",
       "relative overflow-hidden",
       "flex flex-col",
+      "p-4 sm:p-6 md:p-8",
       className
     )}
     style={{
@@ -24,7 +25,7 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({ children, className
       {/* Dark overlay to ensure text readability */}
       <div className="absolute inset-0 bg-black/40 z-0" />
       
-      <div className="flex-1 relative z-10">
+      <div className="flex-1 relative z-10 max-w-7xl mx-auto w-full">
         {children}
       </div>
     </div>

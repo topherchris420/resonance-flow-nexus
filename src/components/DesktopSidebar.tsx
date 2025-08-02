@@ -210,7 +210,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
                   </div>
                   <div className="flex-1 text-left">
                     <div className="font-semibold text-base">{state}</div>
-                    <div className="text-sm opacity-90 mt-1">{getFocusDescription(state)}</div>
+                    <div className="text-base opacity-90 mt-1 [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">{getFocusDescription(state)}</div>
                   </div>
                   {focusState === state && (
                     <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
