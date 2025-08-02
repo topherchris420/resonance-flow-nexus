@@ -1,0 +1,137 @@
+{
+  "BASE SURFACES": {
+    "description": "Describes surface characteristics, including level or irregular topography. Differentiates between land and water surfaces.",
+    "terms": [
+      "Level Surface",
+      "Irregular Surface",
+      "Land",
+      "Water"
+    ]
+  },
+  "LAND": {
+    "description": "Classifies land as manmade or natural. Identifies topography types: level, irregular, or steep peaks.",
+    "terms": [
+      "Manmade Land",
+      "Natural Land",
+      "Level Topography",
+      "Irregular Topography",
+      "Steep Peaks"
+    ]
+  },
+  "WATER": {
+    "description": "Discusses water characteristics, including land/water interfaces and ice or snow presence.",
+    "terms": [
+      "Land/Water Interface",
+      "Ice",
+      "Snow"
+    ]
+  },
+  "ATMOSPHERICS": {
+    "description": "Covers natural and manmade smells, smoke, and cloud dynamics.",
+    "terms": [
+      "Natural Smells",
+      "Manmade Smells",
+      "Smoke",
+      "Cloud Dynamics"
+    ]
+  },
+  "STRUCTURES": {
+    "description": "Differentiates between surface and nonsurface structures. Identifies materials used in structures and their locations.",
+    "terms": [
+      "Surface Structure",
+      "Nonsurface Structure",
+      "Structure Materials",
+      "Structure Locations"
+    ]
+  },
+  "NATURAL OBJECTS": {
+    "description": "Describes natural objects both on and not on the surface.",
+    "terms": [
+      "On Surface",
+      "Not on Surface"
+    ]
+  },
+  "SUBJECTS": {
+    "description": "Classifies subjects by gender and quantity, including focused gatherings.",
+    "terms": [
+      "Male",
+      "Female",
+      "Single",
+      "Multiple",
+      "Focused Gathering"
+    ]
+  },
+  "MOUNTAINS": {
+    "description": "Identifies mountains as singular or multiple.",
+    "terms": [
+      "Singular Mountain",
+      "Multiple Mountains"
+    ]
+  },
+  "NONSURFACE STRUCTURES": {
+    "description": "Discusses characteristics of nonsurface structures, including movement and energetics.",
+    "terms": [
+      "Movement",
+      "Energetics"
+    ]
+  },
+  "LIGHT": {
+    "description": "Describes light conditions as bright, dim, or glowing.",
+    "terms": [
+      "Bright Light",
+      "Dim Light",
+      "Glowing Light"
+    ]
+  },
+  "GENERAL ENVIRONMENT": {
+    "description": "Classifies environments as urban, natural, or harsh.",
+    "terms": [
+      "Urban Environment",
+      "Natural Environment",
+      "Harsh Environment"
+    ]
+  },
+  "ENERGETICS": {
+    "description": "Discusses types of energetics, including explosive and kinetic movements.",
+    "terms": [
+      "Explosive Energetics",
+      "Kinetic Movements"
+    ]
+  },
+  "ACTIVITY": {
+    "description": "Covers activity or movement by subjects and objects.",
+    "terms": [
+      "Subject Activity",
+      "Object Movement"
+    ]
+  },
+  "SOUNDS": {
+    "description": "Describes various sounds, including talking, music, and environmental noises.",
+    "terms": [
+      "Talking",
+      "Music",
+      "Environmental Noises"
+    ]
+  },
+  "TEMPERATURES": {
+    "description": "Classifies temperatures as hot, moderate, or cold.",
+    "terms": [
+      "Hot",
+      "Moderate",
+      "Cold"
+    ]
+  },
+  "DOMINANT SESSION ELEMENTS": {
+    "description": "Identifies key elements in sessions, such as structures and subjects.",
+    "terms": [
+      "Structures",
+      "Subjects"
+    ]
+  },
+  "SKETCHES": {
+    "description": "Provides guidance on sketching various elements related to the target.",
+    "terms": [
+      "Target Elements Sketching"
+    ]
+  }
+}
