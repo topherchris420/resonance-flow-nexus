@@ -3,15 +3,15 @@ import React, { useState, useRef } from 'react';
 const meditationTracks = [
   {
     title: 'Mantra for Inner Peace',
-    src: '/audio/meditation1.mp3',
+    src: 'public/audio/medi.mp3',
   },
   {
     title: 'Affirmations for Clarity',
-    src: '/audio/meditation2.mp3',
+    src: 'public/audio/medi.mp3',
   },
   {
     title: '20-Minute Guided SRV Session',
-    src: '/audio/meditation3.mp3',
+    src: 'public/audio/medi.mp3',
   },
 ];
 
