@@ -81,7 +81,6 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
       <DRREngine
         isActive={isActive}
         micEnabled={micEnabled}
-        audioStream={audioStream}
         onDRRStateUpdate={onDRRStateUpdate}
         onResonanceUpdate={onResonanceUpdate}
         onAudioConfigUpdate={onAudioConfigUpdate}
@@ -96,7 +95,6 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
         focusState={focusState}
         isActive={isActive}
         micEnabled={micEnabled}
-        audioStream={audioStream}
         drrState={drrState}
         audioConfig={audioConfig}
         creativeFlowState={creativeFlowState}
