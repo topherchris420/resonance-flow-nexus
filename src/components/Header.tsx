@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   title?: string;
@@ -40,6 +41,9 @@ const Header: React.FC<HeaderProps> = ({ title = "Project Sentinel" }) => {
         </div>
         
         <div className="hidden sm:flex items-center space-x-4">
+          <Link to="/srv" className="text-sm text-white/90 hover:text-readiness-golden transition-colors">
+            SRV
+          </Link>
           <div className="flex items-center space-x-2 text-sm text-white/90 
                           bg-readiness/20 px-4 py-2 rounded-full
                           border border-readiness-display-primary/30 backdrop-blur-sm
