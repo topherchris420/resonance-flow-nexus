@@ -1,6 +1,6 @@
 # Project Sentinel - Advanced Cognitive Readiness Training Platform
 
-Welcome to **Project Sentinel**, a revolutionary cognitive readiness training platform that combines cutting-edge audio technology, biofeedback systems, and tactical visualization to guide users through profound states of readiness.
+Welcome to **Project Sentinel**, a cognitive readiness training platform that combines cutting-edge audio technology, biofeedback systems, and tactical visualization to guide users through profound states of readiness.
 
 ## 🌟 What Makes Project Sentinel Unique
 
