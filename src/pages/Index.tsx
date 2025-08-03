@@ -200,6 +200,10 @@ const Index = () => {
         stressInoculationActive={stressInoculationActive}
         onToggleTeamCoherence={() => setTeamCoherenceActive(!teamCoherenceActive)}
         teamCoherenceActive={teamCoherenceActive}
+        breathCoherence={breathCoherence}
+        drrState={drrState}
+        creativeFlowState={creativeFlowState}
+        intuitiveForesightState={intuitiveForesightState}
       />
       
       {/* Desktop Sidebar */}
