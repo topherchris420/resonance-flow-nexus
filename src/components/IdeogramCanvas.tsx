@@ -54,22 +54,39 @@ const IdeogramCanvas = () => {
     };
   }, [redrawCanvas]);
 
-  const startDrawing = ({ nativeEvent }: React.MouseEvent<HTMLCanvasElement>) => {
-    const { offsetX, offsetY } = nativeEvent;
+  const getCoords = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>): { offsetX: number, offsetY: number } | null => {
+    if (e.nativeEvent instanceof MouseEvent) {
+      return { offsetX: e.nativeEvent.offsetX, offsetY: e.nativeEvent.offsetY };
+    } else if (e.nativeEvent instanceof TouchEvent) {
+      const touch = e.nativeEvent.touches[0];
+      const canvas = canvasRef.current;
+      if (!canvas) return null;
+      const rect = canvas.getBoundingClientRect();
+      return { offsetX: touch.clientX - rect.left, offsetY: touch.clientY - rect.top };
+    }
+    return null;
+  };
+
+  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    const coords = getCoords(e);
+    if (!coords) return;
+    const { offsetX, offsetY } = coords;
     const path = new Path2D();
     path.moveTo(offsetX, offsetY);
     setCurrentPath(path);
     setIsDrawing(true);
+    if (e.nativeEvent instanceof TouchEvent) e.preventDefault();
   };
 
-  const draw = ({ nativeEvent }: React.MouseEvent<HTMLCanvasElement>) => {
+  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     if (!isDrawing || !currentPath) return;
-    const { offsetX, offsetY } = nativeEvent;
-    const context = canvasRef.current?.getContext('2d');
-    if (!context) return;
-    currentPath.lineTo(offsetX, offsetY);
+    const coords = getCoords(e);
+    if (!coords) return;
+    const { offsetX, offsetY } = coords;
 
+    currentPath.lineTo(offsetX, offsetY);
     redrawCanvas();
+    if (e.nativeEvent instanceof TouchEvent) e.preventDefault();
   };
 
   const stopDrawing = () => {
@@ -103,6 +120,9 @@ const IdeogramCanvas = () => {
           onMouseMove={draw}
           onMouseUp={stopDrawing}
           onMouseLeave={stopDrawing}
+          onTouchStart={startDrawing}
+          onTouchMove={draw}
+          onTouchEnd={stopDrawing}
           onClick={handleCanvasClick}
           className="bg-background rounded cursor-crosshair w-full h-full"
         />
