@@ -16,6 +16,16 @@ export const useAudioContext = () => {
       const audioContext = audioContextRef.current;
       
       if (micEnabled) {
+        // Check for microphone permission first
+        if (navigator.permissions) {
+          try {
+            const result = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+            console.log('Microphone permission status:', result.state);
+          } catch (permError) {
+            console.log('Permission query not supported, proceeding with getUserMedia');
+          }
+        }
+
         const stream = await navigator.mediaDevices.getUserMedia({ 
           audio: {
             echoCancellation: false,
@@ -40,9 +50,19 @@ export const useAudioContext = () => {
         fftDataRef.current = new Float32Array(analyser.frequencyBinCount);
         
         console.log('DRR Engine initialized with Focus 15 Time Collapse detection');
+        console.log('Microphone successfully connected for desktop use');
       }
     } catch (error) {
       console.error('Failed to initialize DRR Engine:', error);
+      if (error instanceof Error) {
+        if (error.name === 'NotAllowedError') {
+          console.error('Microphone access denied. Please enable microphone permissions.');
+        } else if (error.name === 'NotFoundError') {
+          console.error('No microphone found. Please connect a microphone.');
+        } else if (error.name === 'NotReadableError') {
+          console.error('Microphone is already in use by another application.');
+        }
+      }
     }
   }, []);
 

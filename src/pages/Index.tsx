@@ -83,8 +83,24 @@ const Index = () => {
     setShowAAR
   });
 
-  const toggleMicrophone = () => {
-    setMicEnabled(!micEnabled);
+  const toggleMicrophone = async () => {
+    if (!micEnabled) {
+      // Request microphone permission first for desktop
+      try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+        setMicEnabled(true);
+        console.log('Microphone enabled for desktop use');
+      } catch (error) {
+        console.error('Failed to enable microphone:', error);
+        // Show user-friendly error message
+        if (error instanceof Error && error.name === 'NotAllowedError') {
+          alert('Microphone access is required for Project Sentinel to function properly. Please enable microphone permissions in your browser.');
+        }
+      }
+    } else {
+      setMicEnabled(false);
+      console.log('Microphone disabled');
+    }
   };
 
   const handleWelcomeStart = () => {
