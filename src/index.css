@@ -128,6 +128,26 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "cv11", "ss01", "ss03";
+    letter-spacing: -0.005em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold tracking-tight text-foreground;
+  }
+  h1 { @apply text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em]; }
+  h2 { @apply text-2xl md:text-3xl leading-tight tracking-[-0.015em]; }
+  h3 { @apply text-xl md:text-2xl leading-snug; }
+  h4 { @apply text-lg leading-snug; }
+
+  /* Distinctive, uppercase eyebrow label */
+  .label-display {
+    @apply font-display text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground;
+  }
+
+  /* Numeric / metric readouts */
+  .text-metric {
+    @apply font-mono tabular-nums tracking-tight;
   }
 }

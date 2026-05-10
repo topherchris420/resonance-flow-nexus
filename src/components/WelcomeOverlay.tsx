@@ -92,7 +92,7 @@ const WelcomeOverlay: React.FC<WelcomeOverlayProps> = ({ onStart, onClose }) => 
             </div>
           </div>
           
-          <CardTitle className={`text-white text-2xl mb-4 transition-all duration-300 ${isAnimating ? 'opacity-50' : 'opacity-100'}`}>
+          <CardTitle className={`font-display text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-white mb-4 transition-all duration-300 ${isAnimating ? 'opacity-50' : 'opacity-100'}`}>
             {steps[currentStep].title}
           </CardTitle>
           
