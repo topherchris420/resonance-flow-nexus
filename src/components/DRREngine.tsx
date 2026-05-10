@@ -161,7 +161,7 @@ const DRREngine: React.FC<DRREngineProps> = ({
     
     lastUpdateRef.current = currentTime;
     
-    analyserRef.current.getFloatFrequencyData(fftDataRef.current);
+    analyserRef.current.getFloatFrequencyData(fftDataRef.current as Float32Array<ArrayBuffer>);
     
     const { frequencies, amplitudes, phases } = extractDominantFrequencies(
       fftDataRef.current, 
