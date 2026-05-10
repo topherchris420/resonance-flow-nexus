@@ -26,14 +26,14 @@ const Header: React.FC<HeaderProps> = ({ title = "Project Sentinel" }) => {
                             group-hover:opacity-30 transition-opacity duration-500"></div>
           </div>
           <div className="flex flex-col">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-white via-readiness-quantum
-                           to-readiness-golden bg-clip-text text-transparent tracking-wide
-                           drop-shadow-2xl animate-float">
+            <h1 className="font-display text-2xl sm:text-3xl font-semibold bg-gradient-to-r from-white via-readiness-quantum
+                           to-readiness-golden bg-clip-text text-transparent tracking-[-0.02em]
+                           drop-shadow-2xl animate-float leading-none">
               {title}
             </h1>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-readiness-drr rounded-full animate-readiness-pulse"></div>
-              <p className="text-sm text-readiness-quantum/90 font-medium">
+              <p className="label-display text-readiness-quantum/80 mt-0.5">
                 Cognitive Readiness Training
               </p>
             </div>
