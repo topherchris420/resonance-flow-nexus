@@ -90,8 +90,8 @@ const QuantumCoherenceDetector: React.FC<QuantumCoherenceDetectorProps> = ({
   if (!isActive) return null;
 
   return (
-    <div className="fixed top-24 right-6 z-30">
-      <div className="bg-black/70 backdrop-blur-lg rounded-2xl p-4 border border-white/20 shadow-2xl">
+    <div className={`fixed top-24 right-6 z-30 group transition-all duration-300 hover:scale-[1.03] hover:z-40 ${quantumEvent ? 'opacity-100' : 'opacity-50 hover:opacity-100'}`}>
+      <div className="bg-card/40 group-hover:bg-card/85 backdrop-blur-2xl rounded-2xl p-4 border border-white/10 group-hover:border-white/30 shadow-[0_25px_70px_-15px_rgba(0,0,0,0.85)] ring-1 ring-white/5 transition-all duration-300">
         <div className="flex items-center space-x-3 mb-4">
           <Atom className="w-5 h-5 text-purple-400" />
           <span className="text-white text-sm font-medium">Quantum Field</span>

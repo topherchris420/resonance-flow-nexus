@@ -18,7 +18,7 @@ const SacredGeometryOverlay: React.FC<SacredGeometryOverlayProps> = ({
     switch (focusState) {
       case 'Focus 12':
         return (
-          <div className="fixed inset-0 pointer-events-none z-5">
+          <div className="fixed inset-0 pointer-events-none z-[5] opacity-40">
             <svg className="w-full h-full opacity-10 animate-sacred-rotation">
               <defs>
                 <pattern id="focus12" patternUnits="userSpaceOnUse" width="100" height="100">
@@ -34,7 +34,7 @@ const SacredGeometryOverlay: React.FC<SacredGeometryOverlayProps> = ({
       
       case 'Focus 15':
         return (
-          <div className="fixed inset-0 pointer-events-none z-5">
+          <div className="fixed inset-0 pointer-events-none z-[5] opacity-40">
             <svg className="w-full h-full opacity-15 animate-mandala-expand">
               <defs>
                 <pattern id="focus15" patternUnits="userSpaceOnUse" width="150" height="150">
@@ -50,7 +50,7 @@ const SacredGeometryOverlay: React.FC<SacredGeometryOverlayProps> = ({
       
       case 'Focus 21':
         return (
-          <div className="fixed inset-0 pointer-events-none z-5">
+          <div className="fixed inset-0 pointer-events-none z-[5] opacity-40">
             <svg className="w-full h-full opacity-20">
               <defs>
                 <pattern id="focus21" patternUnits="userSpaceOnUse" width="200" height="200">

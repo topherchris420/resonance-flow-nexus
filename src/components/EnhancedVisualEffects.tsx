@@ -112,7 +112,7 @@ const EnhancedVisualEffects: React.FC<EnhancedVisualEffectsProps> = ({
   return (
     <canvas
       ref={particlesRef}
-      className="fixed inset-0 pointer-events-none z-10"
+      className="fixed inset-0 pointer-events-none z-[8] opacity-60"
       style={{ mixBlendMode: 'screen' }}
     />
   );
