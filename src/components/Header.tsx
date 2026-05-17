@@ -30,6 +30,7 @@ const Header: React.FC<HeaderProps> = ({ title = "Project Sentinel" }) => {
                            to-readiness-golden bg-clip-text text-transparent tracking-[-0.02em]
                            drop-shadow-2xl animate-float leading-none">
               {title}
+              <span className="sr-only"> — Cognitive Readiness Training</span>
             </h1>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-readiness-drr rounded-full animate-readiness-pulse"></div>
