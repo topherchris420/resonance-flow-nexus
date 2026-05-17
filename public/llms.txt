@@ -1,0 +1,8 @@
+# Project Sentinel
+
+> Advanced cognitive readiness training platform combining binaural beats, quantum coherence detection, and biorhythm synchronization for peak mental performance.
+
+## Pages
+
+- [Home](/): Main cognitive readiness session with DRR engine, biorhythm sync, and quantum coherence widgets.
+- [SRV](/srv): Structured Remote Viewing training module with vocabulary and target coordinate generator.

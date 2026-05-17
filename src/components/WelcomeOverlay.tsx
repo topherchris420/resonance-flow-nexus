@@ -75,6 +75,7 @@ const WelcomeOverlay: React.FC<WelcomeOverlayProps> = ({ onStart, onClose }) => 
       <Card className="bg-gradient-to-br from-black/95 to-gray-900/95 border-white/20 max-w-lg w-full relative shadow-2xl">
         <button
           onClick={onClose}
+          aria-label="Close welcome introduction"
           className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors z-10 p-2 rounded-full hover:bg-white/10"
         >
           <X className="w-5 h-5" />
