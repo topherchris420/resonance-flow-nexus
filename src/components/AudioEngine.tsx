@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, forwardRef, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useImperativeHandle, forwardRef, useRef } from 'react';
 import { FocusState, DRRNode, AudioConfig, DRREngineState, CreativeFlowState, Focus15State } from '../types/focus';
 import { tacticalCues } from '../utils/tactical-cues';
 
@@ -15,7 +15,12 @@ interface AudioEngineProps {
   onBreathCoherenceUpdate: (coherence: number) => void;
 }
 
-const AudioEngine = forwardRef<any, AudioEngineProps>(({
+export interface AudioEngineHandle {
+  startSession: () => Promise<void>;
+  stopSession: () => void;
+}
+
+const AudioEngine = forwardRef<AudioEngineHandle, AudioEngineProps>(({
   focusState,
   isActive,
   micEnabled,
@@ -30,16 +35,19 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
   useEffect(() => {
     if (isActive && focusState === 'CRL-T') {
       const interval = setInterval(() => {
-        if (Math.random() < 0.2) {
+        const elapsedSeconds = Math.floor(Date.now() / 1000);
+        const coherence = drrState?.vibrationalCoherence ?? 0;
+
+        if (elapsedSeconds % 5 === 0 && coherence > 0.35) {
           tacticalCues.subtleBeep();
         }
-        if (Math.random() < 0.1) {
+        if (elapsedSeconds % 11 === 0 && coherence > 0.6) {
           tacticalCues.sharpeningPulse();
         }
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [isActive, focusState]);
+  }, [drrState?.vibrationalCoherence, isActive, focusState]);
   const audioContextRef = useRef<AudioContext | null>(null);
   const leftOscillatorRef = useRef<OscillatorNode | null>(null);
   const rightOscillatorRef = useRef<OscillatorNode | null>(null);
@@ -54,10 +62,14 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
   const infrasonicOscillatorsRef = useRef<OscillatorNode[]>([]);
   const infrasonicGainsRef = useRef<GainNode[]>([]);
 
-  const initializeBinauralAudio = async () => {
+  const initializeBinauralAudio = useCallback(async () => {
     try {
       if (!audioContextRef.current) {
-        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextConstructor) {
+          throw new Error('Web Audio API is not supported in this browser');
+        }
+        audioContextRef.current = new AudioContextConstructor();
       }
 
       const audioContext = audioContextRef.current;
@@ -133,9 +145,9 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
     } catch (error) {
       console.error('Failed to initialize binaural audio:', error);
     }
-  };
+  }, []);
 
-  const updateBinauralFrequencies = () => {
+  const updateBinauralFrequencies = useCallback(() => {
     if (!audioConfig || !leftOscillatorRef.current || !rightOscillatorRef.current || !audioContextRef.current) {
       return;
     }
@@ -214,9 +226,9 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
     }
 
     console.log(`Updated binaural: L=${audioConfig.leftChannel.toFixed(1)}Hz, R=${audioConfig.rightChannel.toFixed(1)}Hz, Beat=${audioConfig.binauralBeat.toFixed(1)}Hz`);
-  };
+  }, [audioConfig, creativeFlowState, drrState, focus15State]);
 
-  const checkStateTransitions = () => {
+  const checkStateTransitions = useCallback(() => {
     if (!drrState) return;
 
     const { vibrationalCoherence, spectralPhaseStability, harmonicConvergence, timeCollapseActive } = drrState;
@@ -238,9 +250,9 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
     }
 
     onBreathCoherenceUpdate(drrState.breathRhythm);
-  };
+  }, [drrState, focusState, onBreathCoherenceUpdate, onFocusTransition]);
 
-  const startAudioSession = async () => {
+  const startAudioSession = useCallback(async () => {
     await initializeBinauralAudio();
     
     if (leftOscillatorRef.current && rightOscillatorRef.current && dissonanceOscillatorRef.current) {
@@ -257,9 +269,9 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
         console.error('Error starting oscillators:', error);
       }
     }
-  };
+  }, [initializeBinauralAudio]);
 
-  const stopAudioSession = () => {
+  const stopAudioSession = useCallback(() => {
     try {
       if (leftOscillatorRef.current) {
         leftOscillatorRef.current.stop();
@@ -276,7 +288,11 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
       
       // Stop infrasonic oscillators
       infrasonicOscillatorsRef.current.forEach(osc => {
-        try { osc.stop(); } catch(e) {}
+        try {
+          osc.stop();
+        } catch {
+          return;
+        }
       });
       infrasonicOscillatorsRef.current = [];
       infrasonicGainsRef.current = [];
@@ -285,26 +301,26 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
     } catch (error) {
       console.error('Error stopping audio session:', error);
     }
-  };
+  }, []);
 
   useImperativeHandle(ref, () => ({
     startSession: startAudioSession,
     stopSession: stopAudioSession
-  }));
+  }), [startAudioSession, stopAudioSession]);
 
   // Update frequencies when audio config changes
   useEffect(() => {
     if (isActive && audioConfig) {
       updateBinauralFrequencies();
     }
-  }, [audioConfig, isActive, creativeFlowState, focus15State]);
+  }, [audioConfig, isActive, creativeFlowState, focus15State, updateBinauralFrequencies]);
 
   // Check for state transitions when DRR state changes
   useEffect(() => {
     if (isActive && drrState) {
       checkStateTransitions();
     }
-  }, [drrState, focusState, isActive]);
+  }, [drrState, focusState, isActive, checkStateTransitions]);
 
   // Start/stop session based on activity
   useEffect(() => {
@@ -317,7 +333,7 @@ const AudioEngine = forwardRef<any, AudioEngineProps>(({
     return () => {
       stopAudioSession();
     };
-  }, [isActive]);
+  }, [isActive, startAudioSession, stopAudioSession]);
 
   return null;
 });

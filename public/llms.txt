@@ -1,6 +1,6 @@
 # Project Sentinel
 
-> Advanced cognitive readiness training platform combining binaural beats, quantum coherence detection, and biorhythm synchronization for peak mental performance.
+> Experimental cognitive readiness prototype with local audio analysis, binaural tone generation, and interactive visual practice tools.
 
 ## Pages
 

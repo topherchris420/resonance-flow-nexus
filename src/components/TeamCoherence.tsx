@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { DRREngineState, DRRNode } from '../types/focus';
+import { calculateLocalSignalChannels } from '../utils/sessionMetrics';
 
-interface TeamMember {
+interface SignalChannel {
   id: string;
   name: string;
   coherence: number;
@@ -8,47 +10,40 @@ interface TeamMember {
 
 interface TeamCoherenceProps {
   isActive: boolean;
+  drrState?: DRREngineState;
+  resonanceNodes: DRRNode[];
+  breathCoherence: number;
 }
 
-const TeamCoherence: React.FC<TeamCoherenceProps> = ({ isActive }) => {
-  const [team, setTeam] = useState<TeamMember[]>([
-    { id: '1', name: 'Operator 1', coherence: 0 },
-    { id: '2', name: 'Operator 2', coherence: 0 },
-    { id: '3', name: 'Operator 3', coherence: 0 },
-    { id: '4', name: 'Operator 4', coherence: 0 },
-  ]);
+const TeamCoherence: React.FC<TeamCoherenceProps> = ({
+  isActive,
+  drrState,
+  resonanceNodes,
+  breathCoherence
+}) => {
+  if (!isActive || !drrState) return null;
 
-  useEffect(() => {
-    if (!isActive) {
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setTeam(
-        team.map((member) => ({
-          ...member,
-          coherence: Math.random(),
-        }))
-      );
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [isActive, team]);
-
-  const teamCoherence = team.reduce((acc, member) => acc + member.coherence, 0) / team.length;
+  const signalChannels: SignalChannel[] = calculateLocalSignalChannels(
+    drrState,
+    resonanceNodes,
+    breathCoherence
+  );
+  const teamCoherence =
+    signalChannels.reduce((acc, channel) => acc + channel.coherence, 0) /
+    signalChannels.length;
 
   return (
     <div className="absolute bottom-24 right-6 bg-black/80 p-4 rounded-lg text-white">
-      <h3 className="text-lg mb-2">Team Coherence</h3>
+      <h3 className="text-lg mb-2">Signal Coherence</h3>
       <div className="flex items-center space-x-2">
         <div className="w-2 h-2 bg-green-500 rounded-full" />
         <span>{teamCoherence.toFixed(2)}</span>
       </div>
       <div className="mt-4">
-        {team.map((member) => (
-          <div key={member.id} className="flex items-center justify-between">
-            <span>{member.name}</span>
-            <span>{member.coherence.toFixed(2)}</span>
+        {signalChannels.map((channel) => (
+          <div key={channel.id} className="flex items-center justify-between gap-6">
+            <span>{channel.name}</span>
+            <span>{channel.coherence.toFixed(2)}</span>
           </div>
         ))}
       </div>

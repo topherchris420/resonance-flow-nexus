@@ -58,7 +58,10 @@ export const calculateVibrationalCoherence = (amplitudes: number[], frequencies:
   if (amplitudes.length === 0) return 0;
   
   let harmonicScore = 0;
-  const fundamentalFreq = Math.min(...frequencies.filter(f => f > 0));
+  const positiveFrequencies = frequencies.filter(f => f > 0);
+  if (positiveFrequencies.length === 0) return 0;
+
+  const fundamentalFreq = Math.min(...positiveFrequencies);
   
   frequencies.forEach((freq, i) => {
     if (freq > 0 && fundamentalFreq > 0) {
@@ -80,12 +83,15 @@ export const calculateGoldenRatioAlignment = (frequencies: number[]): number => 
   if (frequencies.length < 2) return 0;
   
   const goldenRatio = 1.618033988749;
+  const positiveFrequencies = frequencies.filter(freq => freq > 0);
   let alignmentScore = 0;
   let pairCount = 0;
   
-  for (let i = 0; i < frequencies.length - 1; i++) {
-    for (let j = i + 1; j < frequencies.length; j++) {
-      const ratio = frequencies[j] / frequencies[i];
+  for (let i = 0; i < positiveFrequencies.length - 1; i++) {
+    for (let j = i + 1; j < positiveFrequencies.length; j++) {
+      const lowerFrequency = Math.min(positiveFrequencies[i], positiveFrequencies[j]);
+      const higherFrequency = Math.max(positiveFrequencies[i], positiveFrequencies[j]);
+      const ratio = higherFrequency / lowerFrequency;
       const goldenError = Math.abs(ratio - goldenRatio);
       
       if (goldenError < 0.1) {

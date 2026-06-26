@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { Suspense, lazy, useState, useRef, useEffect } from 'react';
 import MainCanvas from '../components/MainCanvas';
 import Header from '../components/Header';
 import ResponsiveLayout from '../components/ResponsiveLayout';
@@ -14,11 +14,14 @@ import EnhancedVisualEffects from '../components/EnhancedVisualEffects';
 import CognitiveReadinessStatusBar from '../components/CognitiveReadinessStatusBar';
 import SacredGeometryOverlay from '../components/SacredGeometryOverlay';
 import StressInoculation from '../components/StressInoculation';
-import AAR from '../components/AAR';
-import TeamCoherence from '../components/TeamCoherence';
 import { useStateHandlers } from '../hooks/useStateHandlers';
 import { useSessionManager } from '../components/SessionManager';
+import { useHeartRateSensor } from '../hooks/useHeartRateSensor';
+import type { AudioEngineHandle } from '../components/AudioEngine';
 import { FocusState, DRRNode, DRREngineState, AudioConfig, CreativeFlowState, IntuitiveForesightState, SessionLogEntry, Focus15State } from '../types/focus';
+
+const AAR = lazy(() => import('../components/AAR'));
+const TeamCoherence = lazy(() => import('../components/TeamCoherence'));
 
 const Index = () => {
   const [focusState, setFocusState] = useState<FocusState>('Focus 12');
@@ -37,8 +40,9 @@ const Index = () => {
   const [testScore, setTestScore] = useState<number | null>(null);
   const [showAAR, setShowAAR] = useState(false);
   const [teamCoherenceActive, setTeamCoherenceActive] = useState(false);
+  const heartRateSensor = useHeartRateSensor();
   
-  const audioEngineRef = useRef<any>(null);
+  const audioEngineRef = useRef<AudioEngineHandle>(null);
 
   const handleTestComplete = (score: number) => {
     setTestScore(score);
@@ -85,18 +89,8 @@ const Index = () => {
 
   const toggleMicrophone = async () => {
     if (!micEnabled) {
-      // Request microphone permission first for desktop
-      try {
-        await navigator.mediaDevices.getUserMedia({ audio: true });
-        setMicEnabled(true);
-        console.log('Microphone enabled for desktop use');
-      } catch (error) {
-        console.error('Failed to enable microphone:', error);
-        // Show user-friendly error message
-        if (error instanceof Error && error.name === 'NotAllowedError') {
-          alert('Microphone access is required for Project Sentinel to function properly. Please enable microphone permissions in your browser.');
-        }
-      }
+      setMicEnabled(true);
+      console.log('Microphone requested for desktop use');
     } else {
       setMicEnabled(false);
       console.log('Microphone disabled');
@@ -154,6 +148,7 @@ const Index = () => {
         focusState={focusState}
         isActive={isActive}
         micEnabled={micEnabled}
+        externalHeartRate={heartRateSensor.heartRate}
         breathCoherence={breathCoherence}
         drrState={drrState}
         audioConfig={audioConfig}
@@ -216,6 +211,9 @@ const Index = () => {
         stressInoculationActive={stressInoculationActive}
         onToggleTeamCoherence={() => setTeamCoherenceActive(!teamCoherenceActive)}
         teamCoherenceActive={teamCoherenceActive}
+        onConnectHeartRateSensor={heartRateSensor.connect}
+        heartRateSensorConnected={heartRateSensor.isConnected}
+        heartRateSensorAvailable={heartRateSensor.isAvailable}
       />
       
       {/* Desktop Sidebar */}
@@ -234,6 +232,9 @@ const Index = () => {
         stressInoculationActive={stressInoculationActive}
         onToggleTeamCoherence={() => setTeamCoherenceActive(!teamCoherenceActive)}
         teamCoherenceActive={teamCoherenceActive}
+        onConnectHeartRateSensor={heartRateSensor.connect}
+        heartRateSensorConnected={heartRateSensor.isConnected}
+        heartRateSensorAvailable={heartRateSensor.isAvailable}
       />
 
       {/* Welcome Overlay for new users */}
@@ -245,11 +246,20 @@ const Index = () => {
       )}
 
       {showAAR && (
-        <AAR sessionLog={sessionLog} onClose={() => setShowAAR(false)} />
+        <Suspense fallback={null}>
+          <AAR sessionLog={sessionLog} onClose={() => setShowAAR(false)} />
+        </Suspense>
       )}
 
       {teamCoherenceActive && (
-        <TeamCoherence isActive={teamCoherenceActive} />
+        <Suspense fallback={null}>
+          <TeamCoherence
+            isActive={teamCoherenceActive}
+            drrState={drrState}
+            resonanceNodes={resonanceNodes}
+            breathCoherence={breathCoherence}
+          />
+        </Suspense>
       )}
 
       {/* Floating Help Button */}

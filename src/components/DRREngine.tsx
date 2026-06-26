@@ -6,10 +6,22 @@ import { useTimeCollapseDetection } from '../hooks/useTimeCollapseDetection';
 import { extractDominantFrequencies, calculateSpectralPhaseStability, calculateVibrationalCoherence, calculateGoldenRatioAlignment } from '../utils/audioProcessing';
 import { generateResonanceNodes } from '../utils/resonanceUtils';
 import { generateRecursiveGeometries, generateSymbolicTimeDistortion, generateNoTimeLayer, createAtemporalEvent } from '../utils/focus15Utils';
+import { estimateHeartRateFromSignal } from '../utils/sessionMetrics';
+
+interface SessionSymbol {
+  id: string;
+  timestamp: number;
+  pattern: {
+    frequencies: number[];
+    amplitudes: number[];
+    phases: number[];
+  };
+}
 
 interface DRREngineProps {
   isActive: boolean;
   micEnabled: boolean;
+  externalHeartRate?: number;
   onDRRStateUpdate: (state: DRREngineState) => void;
   onResonanceUpdate: (nodes: DRRNode[]) => void;
   onAudioConfigUpdate: (config: AudioConfig) => void;
@@ -22,6 +34,7 @@ interface DRREngineProps {
 const DRREngine: React.FC<DRREngineProps> = ({
   isActive,
   micEnabled,
+  externalHeartRate,
   onDRRStateUpdate,
   onResonanceUpdate,
   onAudioConfigUpdate,
@@ -34,7 +47,7 @@ const DRREngine: React.FC<DRREngineProps> = ({
   
   const lastUpdateRef = useRef<number>(0);
   const amplitudeHistoryRef = useRef<number[]>([]);
-  const sessionSymbolsRef = useRef<Array<{id: string, timestamp: number, pattern: any}>>([]);
+  const sessionSymbolsRef = useRef<SessionSymbol[]>([]);
   
   const [drrState, setDrrState] = useState<DRREngineState>({
     isActive: false,
@@ -79,30 +92,17 @@ const DRREngine: React.FC<DRREngineProps> = ({
 
   const [heartRate, setHeartRate] = useState(60);
 
-  useEffect(() => {
-    if (!isActive) {
-      return;
-    }
-
-    const interval = setInterval(() => {
-      // Placeholder for wearable sensor data
-      setHeartRate(60 + Math.random() * 10);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [isActive]);
-
   const updateCreativeFlow = useCallback((vibrationalCoherence: number, timestamp: number) => {
+    const coherenceSurge = Math.max(0, vibrationalCoherence - 0.7) / 0.3;
     const shouldInjectDissonance = timestamp > creativeFlow.nextInjectionTime && 
-                                   vibrationalCoherence > 0.7 && 
-                                   Math.random() < 0.3;
+                                   vibrationalCoherence > 0.7;
     
     if (shouldInjectDissonance) {
       const newState = {
         enabled: true,
-        dissonanceLevel: 0.3 + Math.random() * 0.4,
+        dissonanceLevel: Math.min(0.7, 0.3 + coherenceSurge * 0.4),
         rhythmicInjections: true,
-        nextInjectionTime: timestamp + 2000 + Math.random() * 3000
+        nextInjectionTime: timestamp + 2000 + (1 - Math.min(1, coherenceSurge)) * 3000
       };
       
       setCreativeFlow(newState);
@@ -186,6 +186,8 @@ const DRREngine: React.FC<DRREngineProps> = ({
     
     const breathRhythm = Math.min(amplitudeVariance * 10, 1);
     const harmonicConvergence = vibrationalCoherence > 0.8 && spectralPhaseStability > 0.7;
+    const estimatedHeartRate = externalHeartRate ?? estimateHeartRateFromSignal(amplitudeHistoryRef.current, heartRate);
+    setHeartRate(estimatedHeartRate);
     
     if (harmonicConvergence) {
       sessionSymbolsRef.current.push({
@@ -215,7 +217,7 @@ const DRREngine: React.FC<DRREngineProps> = ({
       timeCollapseActive: timeCollapseTriggered || drrState.timeCollapseActive,
       resonanceMemory: updatedResonanceMemory,
       stabilityDuration,
-      heartRate
+      heartRate: estimatedHeartRate
     };
     
     setDrrState(newDrrState);
@@ -261,9 +263,10 @@ const DRREngine: React.FC<DRREngineProps> = ({
     updateCreativeFlow(vibrationalCoherence, currentTime);
     updateIntuitiveForesight(goldenRatioAlignment, harmonicConvergence, resonanceNodes);
     
-  }, [isActive, drrState, focus15State, detectTimeCollapseEvent, getSampleRate, getVarianceHistory, getStabilityDuration,
+  }, [isActive, drrState, focus15State, externalHeartRate, detectTimeCollapseEvent, getSampleRate, getVarianceHistory, getStabilityDuration,
+      analyserRef, audioContextRef, fftDataRef, heartRate,
       onDRRStateUpdate, onResonanceUpdate, onAudioConfigUpdate, onFocus15StateUpdate,
-      updateCreativeFlow, updateIntuitiveForesight, creativeFlow.nextInjectionTime]);
+      updateCreativeFlow, updateIntuitiveForesight]);
 
   useEffect(() => {
     if (isActive && micEnabled) {

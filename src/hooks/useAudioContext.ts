@@ -10,7 +10,11 @@ export const useAudioContext = () => {
   const initializeAudioContext = useCallback(async (micEnabled: boolean) => {
     try {
       if (!audioContextRef.current) {
-        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextConstructor) {
+          throw new Error('Web Audio API is not supported in this browser');
+        }
+        audioContextRef.current = new AudioContextConstructor();
       }
 
       const audioContext = audioContextRef.current;
@@ -69,6 +73,7 @@ export const useAudioContext = () => {
   const cleanup = useCallback(() => {
     if (micStreamRef.current) {
       micStreamRef.current.getTracks().forEach(track => track.stop());
+      micStreamRef.current = null;
     }
   }, []);
 

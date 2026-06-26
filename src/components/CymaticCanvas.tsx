@@ -11,6 +11,11 @@ interface CymaticCanvasProps {
   focus15State?: Focus15State;
 }
 
+interface StateColors {
+  primary: [number, number, number];
+  secondary: [number, number, number];
+}
+
 const CymaticCanvas: React.FC<CymaticCanvasProps> = ({
   resonanceNodes,
   focusState,
@@ -83,6 +88,9 @@ const CymaticCanvas: React.FC<CymaticCanvasProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
+  // The draw helpers intentionally live in this closure so the animation loop reads
+  // the current render's canvas state without rebuilding helper callbacks.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resonanceNodes, focusState, isActive, breathCoherence, drrState, intuitiveForesightState, focus15State]);
 
   const drawFocus15TimeCollapse = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number) => {
@@ -360,7 +368,7 @@ const CymaticCanvas: React.FC<CymaticCanvasProps> = ({
   };
 
   const drawSacredGeometry = (ctx: CanvasRenderingContext2D, centerX: number, centerY: number, 
-                              radius: number, sides: number, time: number, colors: any) => {
+                              radius: number, sides: number, time: number, colors: StateColors) => {
     if (!drrState) return;
     
     const alpha = 0.3 + drrState.spectralPhaseStability * 0.5;

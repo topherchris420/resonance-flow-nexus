@@ -1,17 +1,18 @@
 
 import React, { useRef } from 'react';
-import { FocusState, DRREngineState, SessionLogEntry } from '../types/focus';
+import { FocusState, DRRNode, DRREngineState, Focus15State, SessionLogEntry } from '../types/focus';
+import { calculateCognitivePerformance, calculateStressRegulation } from '../utils/sessionMetrics';
 
 interface SessionManagerProps {
   isActive: boolean;
   focusState: FocusState;
   drrState?: DRREngineState;
-  resonanceNodes: any[];
+  resonanceNodes: DRRNode[];
   breathCoherence: number;
   setIsActive: (active: boolean) => void;
   setFocusState: (state: FocusState) => void;
   setSessionLog: (updater: (prev: SessionLogEntry[]) => SessionLogEntry[]) => void;
-  setFocus15State: (state: any) => void;
+  setFocus15State: (state: Focus15State | undefined) => void;
   setShowAAR: (show: boolean) => void;
 }
 
@@ -58,11 +59,10 @@ export const useSessionManager = ({
             mandalaComplexity: resonanceNodes.length,
             goldenRatioAlignment: drrState.goldenRatioAlignment
           },
-          cognitivePerformance: Math.random(), // Placeholder
-          stressRegulation: Math.random() // Placeholder
+          cognitivePerformance: calculateCognitivePerformance(drrState, resonanceNodes.length),
+          stressRegulation: calculateStressRegulation(drrState, breathCoherence)
         };
         
-        // TODO: Encrypt session log before storing
         setSessionLog(prev => [...prev, finalEntry]);
       }
       setShowAAR(true);

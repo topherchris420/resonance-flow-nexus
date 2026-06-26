@@ -1,6 +1,7 @@
 
 import { useCallback, useRef } from 'react';
-import { FocusState, DRRNode, DRREngineState, AudioConfig, CreativeFlowState, IntuitiveForesightState, SessionLogEntry, Focus15State, AtemporalEvent } from '../types/focus';
+import { FocusState, DRRNode, DRREngineState, AudioConfig, CreativeFlowState, IntuitiveForesightState, SessionLogEntry, Focus15State } from '../types/focus';
+import { createAtemporalEvent } from '../utils/focus15Utils';
 
 interface UseStateHandlersProps {
   focusState: FocusState;
@@ -41,23 +42,11 @@ export const useStateHandlers = ({
     // Enhanced session logging with Focus 15 atemporal events
     if (newState === 'Focus 15' && focus15State?.timeCollapseEvent) {
       // Create atemporal event entry instead of normal log entry
-      const atemporalEvent: AtemporalEvent = {
-        randomizedTimestamp: Date.now() + (Math.random() - 0.5) * 600000, // ±10 minutes
-        actualTimestamp: Date.now(),
-        resonanceSignature: resonanceNodes.map(node => node.frequency),
-        symbolicPattern: {
-          type: 'ontological_break',
-          recursionLevel: Math.floor(Math.random() * 7) + 1,
-          mirrorState: true,
-          parallaxDepth: Math.random() * 150
-        },
-        drrMemory: {
-          accumulatedVariance: drrState?.varianceHistory || [],
-          trendPrediction: resonanceNodes.map(n => n.amplitude),
-          resonanceHistory: drrState?.resonanceMemory || []
-        },
-        noTimeMarkers: true
-      };
+      const atemporalEvent = createAtemporalEvent(
+        resonanceNodes,
+        drrState?.varianceHistory || [],
+        drrState?.resonanceMemory || resonanceNodes
+      );
       
       console.log('ATEMPORAL EVENT LOGGED: Focus 15 ontological break recorded');
     } else {

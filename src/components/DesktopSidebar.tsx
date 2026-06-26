@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Play, Pause, Mic, MicOff, Sparkles, Brain, Waves, Zap, Activity, Eye, Crosshair, AlertTriangle, Shield, ShieldOff, MemoryStick, ScanLine, Users, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Pause, Mic, MicOff, Sparkles, Brain, Waves, Zap, Activity, Eye, Crosshair, AlertTriangle, Shield, ShieldOff, MemoryStick, ScanLine, Users, ChevronLeft, ChevronRight, HeartPulse } from 'lucide-react';
 import { FocusState, DRREngineState, CreativeFlowState, IntuitiveForesightState } from '@/types/focus';
 
 interface DesktopSidebarProps {
@@ -19,6 +19,9 @@ interface DesktopSidebarProps {
   stressInoculationActive: boolean;
   onToggleTeamCoherence: () => void;
   teamCoherenceActive: boolean;
+  onConnectHeartRateSensor: () => void;
+  heartRateSensorConnected: boolean;
+  heartRateSensorAvailable: boolean;
 }
 
 const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
@@ -35,7 +38,10 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
   onToggleStressInoculation,
   stressInoculationActive,
   onToggleTeamCoherence,
-  teamCoherenceActive
+  teamCoherenceActive,
+  onConnectHeartRateSensor,
+  heartRateSensorConnected,
+  heartRateSensorAvailable
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const focusStates: FocusState[] = ['Focus 12', 'Focus 15', 'Focus 21', 'CRL-T', 'CRL-M', 'CRL-P'];
@@ -123,6 +129,25 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
                 </div>
                 <span className="font-semibold">{micEnabled ? 'Microphone Active' : 'Enable Microphone'}</span>
                 {micEnabled && <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse ml-auto"></div>}
+              </Button>
+
+              <Button
+                onClick={onConnectHeartRateSensor}
+                disabled={!heartRateSensorAvailable || heartRateSensorConnected}
+                variant="outline"
+                className={`w-full flex items-center space-x-3 border-white/30 transition-all duration-300 transform hover:scale-[1.02] shadow-lg text-base py-6 ${
+                  heartRateSensorConnected
+                    ? 'bg-gradient-to-r from-rose-500/30 to-red-500/30 text-rose-300 ring-2 ring-rose-500/30'
+                    : 'bg-white/10 text-white hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed'
+                }`}
+              >
+                <div className="p-2 bg-white/10 rounded-lg">
+                  <HeartPulse className="w-5 h-5" />
+                </div>
+                <span className="font-semibold">
+                  {heartRateSensorConnected ? 'Heart Sensor Active' : 'Connect Heart Sensor'}
+                </span>
+                {heartRateSensorConnected && <div className="w-3 h-3 bg-rose-400 rounded-full animate-pulse ml-auto"></div>}
               </Button>
             </CardContent>
           </Card>
@@ -263,6 +288,15 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
                         </span>
                       </div>
                     </div>
+
+                    {typeof drrState.heartRate === 'number' && (
+                      <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-white/10">
+                        <span className="text-white/90 font-medium">Heart Rate:</span>
+                        <span className="font-mono font-bold text-rose-300">
+                          {drrState.heartRate} bpm
+                        </span>
+                      </div>
+                    )}
 
                     {drrState.goldenRatioAlignment > 0 && (
                       <div className="flex justify-between items-center p-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-lg border border-yellow-400/20">

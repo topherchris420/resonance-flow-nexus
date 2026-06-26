@@ -6,6 +6,28 @@ interface StressInoculationProps {
   drrState?: DRREngineState;
 }
 
+interface StressAudioCueProps {
+  src: string;
+  intensity: number;
+}
+
+const conflictSounds = [
+  'https://actions.google.com/sounds/v1/wars/distant_gunshots.ogg',
+  'https://actions.google.com/sounds/v1/wars/distant_explosion.ogg',
+];
+
+const StressAudioCue: React.FC<StressAudioCueProps> = ({ src, intensity }) => {
+  const audioRef = React.useRef<HTMLAudioElement>(null);
+
+  React.useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = intensity * 0.5;
+    }
+  }, [intensity]);
+
+  return <audio ref={audioRef} src={src} autoPlay loop />;
+};
+
 const StressInoculation: React.FC<StressInoculationProps> = ({ isActive, drrState }) => {
   const [intensity, setIntensity] = useState(0);
 
@@ -19,11 +41,6 @@ const StressInoculation: React.FC<StressInoculationProps> = ({ isActive, drrStat
     const newIntensity = 1 - drrState.vibrationalCoherence;
     setIntensity(newIntensity);
   }, [isActive, drrState]);
-
-  const conflictSounds = [
-    'https://actions.google.com/sounds/v1/wars/distant_gunshots.ogg',
-    'https://actions.google.com/sounds/v1/wars/distant_explosion.ogg',
-  ];
 
   return (
     <div>
@@ -44,24 +61,9 @@ const StressInoculation: React.FC<StressInoculationProps> = ({ isActive, drrStat
           />
 
           {/* Audio cues */}
-          {conflictSounds.map((sound, index) => {
-            const audioRef = React.useRef<HTMLAudioElement>(null);
-            React.useEffect(() => {
-              if (audioRef.current) {
-                audioRef.current.volume = intensity * 0.5;
-              }
-            }, [intensity]);
-            
-            return (
-              <audio
-                key={index}
-                ref={audioRef}
-                src={sound}
-                autoPlay
-                loop
-              />
-            );
-          })}
+          {conflictSounds.map(sound => (
+            <StressAudioCue key={sound} src={sound} intensity={intensity} />
+          ))}
         </>
       )}
     </div>

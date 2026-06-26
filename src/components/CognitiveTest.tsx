@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FocusState } from '../types/focus';
 
+type CognitiveTestData =
+  | { type: 'memory'; sequence: number[] }
+  | { type: 'pattern'; sequence: number[]; missingNumber: number };
+
 interface CognitiveTestProps {
   isActive: boolean;
   focusState: FocusState;
@@ -8,12 +12,13 @@ interface CognitiveTestProps {
 }
 
 const CognitiveTest: React.FC<CognitiveTestProps> = ({ isActive, focusState, onTestComplete }) => {
-  const [testData, setTestData] = useState<any>(null);
-  const [userAnswer, setUserAnswer] = useState<any>(null);
+  const [testData, setTestData] = useState<CognitiveTestData | null>(null);
+  const [userAnswer, setUserAnswer] = useState('');
 
   useEffect(() => {
     if (!isActive) {
       setTestData(null);
+      setUserAnswer('');
       return;
     }
 
@@ -21,11 +26,13 @@ const CognitiveTest: React.FC<CognitiveTestProps> = ({ isActive, focusState, onT
       // Generate a memory test
       const sequence = Array.from({ length: 5 }, () => Math.floor(Math.random() * 10));
       setTestData({ type: 'memory', sequence });
+      setUserAnswer('');
     } else if (focusState === 'CRL-P') {
       // Generate a pattern recognition test
       const sequence = [1, 2, 4, 8, 16];
       const missingNumber = 32;
       setTestData({ type: 'pattern', sequence, missingNumber });
+      setUserAnswer('');
     }
   }, [isActive, focusState]);
 
@@ -51,6 +58,7 @@ const CognitiveTest: React.FC<CognitiveTestProps> = ({ isActive, focusState, onT
           <input
             type="text"
             className="bg-transparent border-b-2 border-white text-center text-2xl w-full"
+            value={userAnswer}
             onChange={(e) => setUserAnswer(e.target.value)}
           />
         </div>
@@ -62,6 +70,7 @@ const CognitiveTest: React.FC<CognitiveTestProps> = ({ isActive, focusState, onT
           <input
             type="text"
             className="bg-transparent border-b-2 border-white text-center text-2xl w-full"
+            value={userAnswer}
             onChange={(e) => setUserAnswer(e.target.value)}
           />
         </div>

@@ -2,7 +2,7 @@
 import React from 'react';
 import CymaticCanvas from './CymaticCanvas';
 import TacticalDisplay from './TacticalDisplay';
-import AudioEngine from './AudioEngine';
+import AudioEngine, { type AudioEngineHandle } from './AudioEngine';
 import DRREngine from './DRREngine';
 import CognitiveTest from './CognitiveTest';
 import { FocusState, DRRNode, DRREngineState, AudioConfig, CreativeFlowState, IntuitiveForesightState, Focus15State } from '../types/focus';
@@ -12,13 +12,14 @@ interface MainCanvasProps {
   focusState: FocusState;
   isActive: boolean;
   micEnabled: boolean;
+  externalHeartRate?: number;
   breathCoherence: number;
   drrState?: DRREngineState;
   audioConfig?: AudioConfig;
   creativeFlowState?: CreativeFlowState;
   intuitiveForesightState?: IntuitiveForesightState;
   focus15State?: Focus15State;
-  audioEngineRef: React.RefObject<any>;
+  audioEngineRef: React.RefObject<AudioEngineHandle>;
   onDRRStateUpdate: (state: DRREngineState) => void;
   onResonanceUpdate: (nodes: DRRNode[]) => void;
   onAudioConfigUpdate: (config: AudioConfig) => void;
@@ -35,6 +36,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
   focusState,
   isActive,
   micEnabled,
+  externalHeartRate,
   breathCoherence,
   drrState,
   audioConfig,
@@ -81,6 +83,7 @@ const MainCanvas: React.FC<MainCanvasProps> = ({
       <DRREngine
         isActive={isActive}
         micEnabled={micEnabled}
+        externalHeartRate={externalHeartRate}
         onDRRStateUpdate={onDRRStateUpdate}
         onResonanceUpdate={onResonanceUpdate}
         onAudioConfigUpdate={onAudioConfigUpdate}
