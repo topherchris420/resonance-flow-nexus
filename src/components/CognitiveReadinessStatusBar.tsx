@@ -28,20 +28,20 @@ const CognitiveReadinessStatusBar: React.FC<CognitiveReadinessStatusBarProps> = 
 
   return (
     <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-40 
-                    bg-background/80 backdrop-blur-md border border-border/50 
-                    rounded-full px-6 py-3 shadow-lg">
+                    bg-slate-950/85 backdrop-blur-md border border-white/15 
+                    rounded-full px-6 py-3 shadow-lg shadow-black/40 text-white">
       <div className="flex items-center space-x-6 text-sm">
         {/* CRL Indicator */}
         <div className="flex items-center space-x-2">
           <div className={`w-3 h-3 rounded-full bg-${getStateColor(focusState)} 
                           ${isActive ? 'animate-pulse' : 'opacity-50'}`} />
-          <span className="font-medium text-foreground">{focusState}</span>
+          <span className="font-medium text-white">{focusState}</span>
         </div>
 
         {/* Breath Coherence */}
         <div className="flex items-center space-x-2">
           <Activity className="w-4 h-4 text-green-400" />
-          <span className="text-muted-foreground">Breath:</span>
+          <span className="text-white/75">Breath:</span>
           <span className="font-mono text-green-400">
             {formatValue(breathCoherence)}%
           </span>
@@ -51,7 +51,7 @@ const CognitiveReadinessStatusBar: React.FC<CognitiveReadinessStatusBarProps> = 
         {drrState && (
           <div className="flex items-center space-x-2">
             <Brain className="w-4 h-4 text-blue-400" />
-            <span className="text-muted-foreground">Coherence:</span>
+            <span className="text-white/75">Coherence:</span>
             <span className="font-mono text-blue-400">
               {formatValue(drrState.vibrationalCoherence)}%
             </span>
@@ -62,7 +62,7 @@ const CognitiveReadinessStatusBar: React.FC<CognitiveReadinessStatusBarProps> = 
         {drrState && (
           <div className="flex items-center space-x-2">
             <Zap className="w-4 h-4 text-yellow-400" />
-            <span className="text-muted-foreground">Stability:</span>
+            <span className="text-white/75">Stability:</span>
             <span className="font-mono text-yellow-400">
               {formatValue(drrState.spectralPhaseStability)}%
             </span>
