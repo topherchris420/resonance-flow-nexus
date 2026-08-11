@@ -53,6 +53,12 @@
     --display-primary: 260 80% 70%;
     --display-secondary: 200 70% 65%;
     --golden-ratio: 45 100% 65%;
+
+    /* Brand accent (single-accent showcase surfaces) */
+    --brand: 217 92% 52%;
+    --brand-foreground: 0 0% 100%;
+    --surface: 0 0% 100%;
+    --surface-muted: 220 14% 96%;
     
     /* Modern enhanced shadows with glow effects */
     --shadow-readiness: 0 25px 80px -15px hsl(var(--quantum-coherence) / 0.6);
