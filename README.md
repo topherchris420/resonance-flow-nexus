@@ -15,15 +15,6 @@ The current app is experimental. It should be treated as a training and visualiz
 - SRV practice page with guided audio playback, coordinate generation, ideogram drawing, and vocabulary.
 - Progressive Web App build output through `vite-plugin-pwa`.
 
-## Demo And Simulated Signals
-
-Some displayed signals are intentionally synthetic while the prototype evolves:
-
-- Signal coherence is derived from local phase, breath, harmonic, and node-stability channels.
-- Heart-rate display uses a connected Bluetooth Heart Rate sensor when available, otherwise it falls back to a local microphone-derived estimate.
-- Cognitive performance and stress regulation scores are deterministic session composites.
-- "Quantum", "biorhythm", and similar labels are visualization metaphors based on local app metrics, not scientific measurements.
-
 ## Privacy Notes
 
 - Microphone processing happens in the browser.
@@ -64,10 +55,3 @@ npm audit --audit-level=moderate
 - `src/pages/SRV.tsx` - SRV practice workflow.
 - `src/utils/audioProcessing.ts` - pure audio metric helpers with unit coverage.
 - `tests/` - Node test-runner tests.
-
-## Current Improvement Priorities
-
-1. Split the large visualization and sidebar components into smaller units.
-2. Add component-level tests around session controls and microphone state.
-3. Add real PWA icon assets at standard sizes.
-4. Add a bundle-size budget in CI.
