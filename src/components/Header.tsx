@@ -12,30 +12,29 @@ const Header: React.FC<HeaderProps> = ({ title = "Project Sentinel" }) => {
                       border-b border-readiness-quantum/40 shadow-sacred">
       <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
         <div className="flex items-center space-x-4">
-          <div className="relative group">
+          <div className="relative group cursor-pointer">
             <img 
-              src="/lovable-uploads/e5b686f9-ff1e-4506-bab4-1bb5e2bb3d01.png"
-              alt="Meditation Consciousness Logo"
-              className="w-14 h-14 rounded-full object-cover ring-2 ring-readiness-quantum/70
-                         shadow-sacred transition-all duration-700 group-hover:ring-readiness-golden/90
-                         group-hover:scale-125 animate-consciousness-glow backdrop-blur-sm"
+              src="/sentinel-logo.jpg"
+              alt="Project Sentinel Emblem"
+              className="w-12 h-12 rounded-full object-cover ring-2 ring-cyan-500/60
+                         shadow-lg shadow-cyan-500/30 transition-all duration-500 group-hover:ring-cyan-300
+                         group-hover:scale-110 group-hover:shadow-cyan-400/50"
             />
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-readiness-drr rounded-full
-                            animate-readiness-pulse shadow-sacred"></div>
-            <div className="absolute inset-0 rounded-full bg-readiness opacity-0
-                            group-hover:opacity-30 transition-opacity duration-500"></div>
+            <div className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-cyan-400 rounded-full
+                            animate-ping opacity-75"></div>
+            <div className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-cyan-400 rounded-full"></div>
           </div>
           <div className="flex flex-col">
-            <h1 className="font-display text-2xl sm:text-3xl font-semibold bg-gradient-to-r from-white via-readiness-quantum
-                           to-readiness-golden bg-clip-text text-transparent tracking-[-0.02em]
-                           drop-shadow-2xl animate-float leading-none">
+            <h1 className="font-['Syne',sans-serif] text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-white via-cyan-100
+                           to-cyan-400 bg-clip-text text-transparent tracking-wider uppercase
+                           drop-shadow-md leading-none">
               {title}
               <span className="sr-only"> — Cognitive Readiness Training</span>
             </h1>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-readiness-drr rounded-full animate-readiness-pulse"></div>
-              <p className="label-display text-readiness-quantum/80 mt-0.5">
-                Cognitive Readiness Training
+            <div className="flex items-center space-x-2 mt-1">
+              <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></div>
+              <p className="font-['Plus_Jakarta_Sans',sans-serif] text-xs text-cyan-300/80 font-medium tracking-wide uppercase">
+                Cognitive Readiness Matrix
               </p>
             </div>
           </div>

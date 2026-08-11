@@ -188,15 +188,19 @@ export const Session = () => {
       {/* Navigation Header */}
       <header className="fixed top-0 inset-x-0 z-40 px-6 py-4 flex items-center justify-between backdrop-blur-md bg-black/30 border-b border-white/10">
         <div className="flex items-center gap-4">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="relative">
+              <img 
+                src="/sentinel-logo.jpg" 
+                alt="Project Sentinel Logo" 
+                className="w-10 h-10 rounded-full object-cover ring-2 ring-cyan-500/50 shadow-md shadow-cyan-500/30 group-hover:scale-110 transition-transform duration-300"
+              />
+              <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-cyan-400 rounded-full animate-ping opacity-75"></div>
+              <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-cyan-400 rounded-full"></div>
             </div>
             <div>
-              <span className="font-bold text-lg tracking-wider text-white uppercase group-hover:text-cyan-400 transition-colors">PROJECT SENTINEL</span>
-              <span className="block text-[10px] font-mono text-cyan-400/80 tracking-widest uppercase">Cognitive Readiness Session</span>
+              <span className="font-['Syne',sans-serif] font-extrabold text-lg tracking-wider bg-gradient-to-r from-white via-cyan-100 to-cyan-400 bg-clip-text text-transparent uppercase group-hover:text-cyan-300 transition-colors">PROJECT SENTINEL</span>
+              <span className="block text-[10px] font-['Plus_Jakarta_Sans',sans-serif] text-cyan-400/90 tracking-widest uppercase font-semibold">Cognitive Readiness Session</span>
             </div>
           </Link>
           <div className="hidden md:flex items-center gap-2 ml-6 px-3 py-1 rounded-full bg-white/5 border border-white/10 font-mono text-xs text-slate-300">
