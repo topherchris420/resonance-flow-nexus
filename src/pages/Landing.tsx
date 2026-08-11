@@ -161,7 +161,7 @@ const Landing: React.FC = () => {
           <div className="flex max-w-6xl flex-col items-center text-center">
             <h1
               className="font-display font-bold uppercase leading-[0.85] tracking-[-0.05em]"
-              style={{ fontSize: "clamp(3.5rem, 15vw, 14rem)" }}
+              style={{ fontSize: "clamp(3.5rem, 15vw, 14rem)", color: "inherit" }}
             >
               {p.word}
             </h1>
