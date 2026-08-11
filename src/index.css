@@ -54,6 +54,18 @@
     --display-secondary: 200 70% 65%;
     --golden-ratio: 45 100% 65%;
 
+    /* Snap-panel palette (full-screen color blocks) */
+    --panel-1: 353 66% 36%;
+    --panel-1-fg: 166 72% 66%;
+    --panel-2: 166 72% 66%;
+    --panel-2-fg: 353 66% 36%;
+    --panel-3: 240 6% 10%;
+    --panel-3-fg: 45 96% 62%;
+    --panel-4: 45 96% 62%;
+    --panel-4-fg: 240 6% 10%;
+    --panel-5: 217 92% 52%;
+    --panel-5-fg: 0 0% 100%;
+
     /* Brand accent (single-accent showcase surfaces) */
     --brand: 217 92% 52%;
     --brand-foreground: 0 0% 100%;
@@ -169,5 +181,21 @@
   .marquee-mask {
     -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
     mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  }
+}
+
+@layer utilities {
+  .snap-root {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100vh;
+    height: 100dvh;
+  }
+  .snap-panel {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .vertical-rail {
+    writing-mode: vertical-rl;
   }
 }
