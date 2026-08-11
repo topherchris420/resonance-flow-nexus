@@ -37,6 +37,7 @@ const CognitiveTest: React.FC<CognitiveTestProps> = ({ isActive, focusState, onT
   }, [isActive, focusState]);
 
   const handleAnswer = () => {
+    if (!testData) return;
     if (testData.type === 'memory') {
       const score = testData.sequence.toString() === userAnswer ? 1 : 0;
       onTestComplete(score);

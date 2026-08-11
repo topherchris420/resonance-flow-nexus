@@ -16,6 +16,9 @@ interface MobileControlsProps {
   stressInoculationActive?: boolean;
   onToggleTeamCoherence?: () => void;
   teamCoherenceActive?: boolean;
+  onConnectHeartRateSensor?: () => void;
+  heartRateSensorConnected?: boolean;
+  heartRateSensorAvailable?: boolean;
 }
 
 const MobileControls: React.FC<MobileControlsProps> = ({

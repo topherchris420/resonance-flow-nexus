@@ -39,7 +39,7 @@ export const useHeartRateSensor = () => {
       const characteristic = await service.getCharacteristic(HEART_RATE_MEASUREMENT);
 
       characteristic.addEventListener('characteristicvaluechanged', event => {
-        const target = event.target as BluetoothRemoteGATTCharacteristic;
+        const target = event.target as unknown as BluetoothRemoteGATTCharacteristic;
         if (target.value) {
           setHeartRate(parseHeartRateMeasurement(target.value));
         }

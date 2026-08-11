@@ -13,7 +13,7 @@ const EnhancedVisualEffects: React.FC<EnhancedVisualEffectsProps> = ({
   drrState
 }) => {
   const particlesRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     if (!isActive || !particlesRef.current) return;

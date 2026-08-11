@@ -26,7 +26,7 @@ const CymaticCanvas: React.FC<CymaticCanvasProps> = ({
   focus15State
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -298,7 +298,7 @@ const CymaticCanvas: React.FC<CymaticCanvasProps> = ({
     const time = Date.now() * 0.001;
     const baseRadius = 60 + drrState.vibrationalCoherence * 80;
     
-    const getStateColors = () => {
+    const getStateColors = (): StateColors => {
       const coherence = drrState.vibrationalCoherence;
       switch (focusState) {
         case 'Focus 12': 
