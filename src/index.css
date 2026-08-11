@@ -157,3 +157,17 @@
     @apply font-mono tabular-nums tracking-tight;
   }
 }
+/* ===== Showcase surfaces (gallery-style landing) ===== */
+@layer utilities {
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-rise-in {
+    animation: rise-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .marquee-mask {
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  }
+}
