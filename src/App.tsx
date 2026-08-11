@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Landing from "./pages/Landing";
 
 const queryClient = new QueryClient();
+const Session = lazy(() => import("./pages/Session"));
 const SRV = lazy(() => import("./pages/SRV"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -20,7 +21,7 @@ const App = () => (
         <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/session" element={<Index />} />
+            <Route path="/session" element={<Session />} />
             <Route path="/srv" element={<SRV />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
