@@ -19,7 +19,7 @@ interface MainCanvasProps {
   creativeFlowState?: CreativeFlowState;
   intuitiveForesightState?: IntuitiveForesightState;
   focus15State?: Focus15State;
-  audioEngineRef: React.RefObject<AudioEngineHandle>;
+  audioEngineRef: React.RefObject<AudioEngineHandle | null>;
   onDRRStateUpdate: (state: DRREngineState) => void;
   onResonanceUpdate: (nodes: DRRNode[]) => void;
   onAudioConfigUpdate: (config: AudioConfig) => void;

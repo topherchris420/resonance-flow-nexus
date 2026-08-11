@@ -53,6 +53,12 @@
     --display-primary: 260 80% 70%;
     --display-secondary: 200 70% 65%;
     --golden-ratio: 45 100% 65%;
+
+    /* Brand accent (single-accent showcase surfaces) */
+    --brand: 217 92% 52%;
+    --brand-foreground: 0 0% 100%;
+    --surface: 0 0% 100%;
+    --surface-muted: 220 14% 96%;
     
     /* Modern enhanced shadows with glow effects */
     --shadow-readiness: 0 25px 80px -15px hsl(var(--quantum-coherence) / 0.6);
@@ -149,5 +155,19 @@
   /* Numeric / metric readouts */
   .text-metric {
     @apply font-mono tabular-nums tracking-tight;
+  }
+}
+/* ===== Showcase surfaces (gallery-style landing) ===== */
+@layer utilities {
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-rise-in {
+    animation: rise-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .marquee-mask {
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
   }
 }

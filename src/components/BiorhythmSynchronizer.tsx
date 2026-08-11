@@ -50,7 +50,7 @@ const BiorhythmSynchronizer: React.FC<BiorhythmSynchronizerProps> = ({
 
     // Calculate which rhythm is dominant
     const rhythms = { physical, emotional, intellectual, spiritual };
-    const dominant = Object.entries(rhythms).reduce((a, b) => rhythms[a[0]] > rhythms[b[0]] ? a : b);
+    const dominant = Object.entries(rhythms).reduce((a, b) => (a[1] > b[1] ? a : b));
     setDominantRhythm(dominant[0]);
 
     // Calculate synchronization with DRR state
