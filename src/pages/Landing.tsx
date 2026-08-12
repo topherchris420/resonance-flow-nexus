@@ -59,6 +59,7 @@ const Landing: React.FC = () => {
   const rootRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const [leaving, setLeaving] = useState(false);
+  const [breathCycle, setBreathCycle] = useState(8);
   const navigate = useNavigate();
 
   const enterSession = () => {
@@ -199,7 +200,32 @@ const Landing: React.FC = () => {
             {i === PANELS.length - 1 && (
               <>
                 <div className="mt-10 flex flex-col items-center">
-                  <OnboardingMandalaPreview color={`hsl(${p.fg})`} cycleSeconds={8} />
+                  <OnboardingMandalaPreview color={`hsl(${p.fg})`} cycleSeconds={breathCycle} />
+                  <div className="mt-6 w-full max-w-xs">
+                    <div className="flex items-baseline justify-between font-mono text-[0.65rem] uppercase tracking-[0.25em] opacity-70">
+                      <label htmlFor="breath-rate">Breath rate</label>
+                      <span>{breathCycle}s · {(60 / breathCycle).toFixed(1)} bpm</span>
+                    </div>
+                    <input
+                      id="breath-rate"
+                      type="range"
+                      min={4}
+                      max={16}
+                      step={1}
+                      value={breathCycle}
+                      onChange={(e) => setBreathCycle(Number(e.target.value))}
+                      aria-label="Breath cycle length in seconds"
+                      className="mt-3 h-1 w-full cursor-pointer appearance-none rounded-full outline-none"
+                      style={{
+                        accentColor: `hsl(${p.fg})`,
+                        backgroundColor: `hsl(${p.fg} / 0.25)`,
+                      }}
+                    />
+                    <div className="mt-2 flex justify-between font-sans text-[0.7rem] opacity-55">
+                      <span>Quick</span>
+                      <span>Deep</span>
+                    </div>
+                  </div>
                 </div>
                 <ul className="mt-10 grid w-full max-w-3xl gap-3 text-left sm:grid-cols-3">
                   {ONBOARDING.map((step, si) => (
