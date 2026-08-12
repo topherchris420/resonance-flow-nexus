@@ -124,8 +124,30 @@ const OnboardingMandalaPreview: React.FC<OnboardingMandalaPreviewProps> = ({
         aria-label="Preview of the resonance mandala breathing in a slow rhythm"
         style={{ width: 260, height: 260 }}
       />
-      <p className="mt-2 text-center font-mono text-[0.65rem] uppercase tracking-[0.3em] opacity-70">
+      <p
+        aria-live="polite"
+        className="mt-2 text-center font-mono text-[0.65rem] uppercase tracking-[0.3em] opacity-70"
+      >
         {phase === "inhale" ? "Breathe in" : "Breathe out"}
+      </p>
+      <div className="mt-3 flex items-center justify-center gap-2 font-mono text-[0.6rem] uppercase tracking-[0.25em]">
+        <span style={{ opacity: stage === "focus12" ? 1 : 0.4 }}>Focus 12</span>
+        <span
+          className="h-px w-8 origin-left transition-transform duration-700"
+          style={{
+            backgroundColor: "currentColor",
+            opacity: stage === "shifting" ? 1 : 0.35,
+            transform: stage === "focus12" ? "scaleX(0.4)" : "scaleX(1)",
+          }}
+        />
+        <span style={{ opacity: stage === "focus15" ? 1 : 0.4 }}>Focus 15</span>
+      </div>
+      <p className="mt-2 text-center font-sans text-[0.7rem] opacity-60">
+        {stage === "focus12"
+          ? "Expanded awareness — the pattern settles with your breath."
+          : stage === "shifting"
+          ? "Coherence threshold reached — the geometry is reorganising."
+          : "Focus 15 — denser petals, slower time, no clock."}
       </p>
     </div>
   );
