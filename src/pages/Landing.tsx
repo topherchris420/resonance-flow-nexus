@@ -135,13 +135,13 @@ const Landing: React.FC = () => {
                 <sup className="ml-0.5 font-mono text-[0.6em]">{i + 1}</sup>
               </button>
             ))}
-            <Link
-              to="/session"
+            <button
+              onClick={enterSession}
               className="rounded-full border px-4 py-1.5 text-sm font-semibold transition-transform duration-300 hover:scale-105"
               style={{ borderColor: `hsl(${current.fg} / 0.5)` }}
             >
               Enter session
-            </Link>
+            </button>
           </div>
         </div>
       </nav>
@@ -196,13 +196,44 @@ const Landing: React.FC = () => {
               {p.caption}
             </p>
             {i === PANELS.length - 1 && (
-              <Link
-                to="/session"
-                className="mt-10 rounded-full px-10 py-4 font-sans text-base font-semibold transition-transform duration-300 hover:scale-105"
-                style={{ backgroundColor: `hsl(${p.fg})`, color: `hsl(${p.bg})` }}
-              >
-                Enter the session
-              </Link>
+              <>
+                <ul className="mt-10 grid w-full max-w-3xl gap-3 text-left sm:grid-cols-3">
+                  {ONBOARDING.map((step, si) => (
+                    <li
+                      key={step.title}
+                      className="rounded-2xl border p-5 backdrop-blur-sm animate-fade-in"
+                      style={{
+                        borderColor: `hsl(${p.fg} / 0.25)`,
+                        backgroundColor: `hsl(${p.fg} / 0.06)`,
+                        animationDelay: `${si * 120}ms`,
+                        animationFillMode: "both",
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <step.icon className="h-4 w-4" />
+                        <span className="font-mono text-[0.65rem] uppercase tracking-[0.25em] opacity-70">
+                          0{si + 1}
+                        </span>
+                      </div>
+                      <h2 className="mt-3 font-display text-lg font-semibold tracking-tight">
+                        {step.title}
+                      </h2>
+                      <p className="mt-1 font-sans text-sm opacity-75">{step.body}</p>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={enterSession}
+                  className="group mt-10 inline-flex items-center gap-3 rounded-full px-10 py-4 font-sans text-base font-semibold transition-transform duration-300 hover:scale-105"
+                  style={{ backgroundColor: `hsl(${p.fg})`, color: `hsl(${p.bg})` }}
+                >
+                  Enter the session
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </button>
+                <p className="mt-4 font-sans text-xs opacity-60">
+                  Takes about 30 seconds to calibrate. No account needed.
+                </p>
+              </>
             )}
           </div>
 
@@ -211,6 +242,14 @@ const Landing: React.FC = () => {
           </span>
         </section>
       ))}
+
+      {/* Transition veil */}
+      <div
+        aria-hidden
+        className={`pointer-events-none fixed inset-0 z-[60] bg-black transition-opacity duration-500 ${
+          leaving ? "opacity-100" : "opacity-0"
+        }`}
+      />
     </div>
   );
 };
