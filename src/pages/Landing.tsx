@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Headphones, Activity, Waves, ArrowRight } from "lucide-react";
 
 type Panel = {
   id: string;
@@ -56,6 +57,32 @@ const PANELS: Panel[] = [
 const Landing: React.FC = () => {
   const rootRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const [leaving, setLeaving] = useState(false);
+  const navigate = useNavigate();
+
+  const enterSession = () => {
+    if (leaving) return;
+    setLeaving(true);
+    window.setTimeout(() => navigate("/session"), 450);
+  };
+
+  const ONBOARDING = [
+    {
+      icon: Headphones,
+      title: "Put headphones on",
+      body: "Binaural carriers need stereo separation to work.",
+    },
+    {
+      icon: Activity,
+      title: "Share breath or pulse",
+      body: "Optional mic or heart-rate input sharpens the read.",
+    },
+    {
+      icon: Waves,
+      title: "Watch your signal form",
+      body: "Cymatic geometry moves with your coherence, live.",
+    },
+  ];
 
   useEffect(() => {
     const root = rootRef.current;
