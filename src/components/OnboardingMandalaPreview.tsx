@@ -21,7 +21,7 @@ const OnboardingMandalaPreview: React.FC<OnboardingMandalaPreviewProps> = ({
   onPhaseChange,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number | undefined>(undefined);
   const phaseRef = useRef<"inhale" | "exhale">("inhale");
   const [phase, setPhase] = useState<"inhale" | "exhale">("inhale");
 
