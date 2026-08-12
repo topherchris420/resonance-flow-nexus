@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Headphones, Activity, Waves, ArrowRight } from "lucide-react";
+import OnboardingMandalaPreview from "@/components/OnboardingMandalaPreview";
 
 type Panel = {
   id: string;
@@ -197,6 +198,9 @@ const Landing: React.FC = () => {
             </p>
             {i === PANELS.length - 1 && (
               <>
+                <div className="mt-10 flex flex-col items-center">
+                  <OnboardingMandalaPreview color={`hsl(${p.fg})`} cycleSeconds={8} />
+                </div>
                 <ul className="mt-10 grid w-full max-w-3xl gap-3 text-left sm:grid-cols-3">
                   {ONBOARDING.map((step, si) => (
                     <li
