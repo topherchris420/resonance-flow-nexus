@@ -281,13 +281,13 @@ export const Session: React.FC = () => {
   }, [audioChimeEnabled, audioMuted, isSessionActive, masterVolume]);
 
   // Start Binaural & Ambient Engine
-  const startAudioSynthesis = () => {
+  const startAudioSynthesis = async () => {
     initAudio();
     const ctx = audioCtxRef.current;
     if (!ctx || !gainMasterRef.current) return;
 
     if (ctx.state === 'suspended') {
-      ctx.resume();
+      await ctx.resume();
     }
 
     const now = ctx.currentTime;
@@ -300,7 +300,7 @@ export const Session: React.FC = () => {
     oscL.type = 'sine';
     oscL.frequency.setValueAtTime(leftFreq, now);
     gainL.gain.setValueAtTime(0.001, now);
-    gainL.gain.exponentialRampToValueAtTime(0.5, now + 0.5);
+    gainL.gain.exponentialRampToValueAtTime(0.5, now + 0.4);
 
     // Right Channel
     const oscR = ctx.createOscillator();
@@ -308,7 +308,7 @@ export const Session: React.FC = () => {
     oscR.type = 'sine';
     oscR.frequency.setValueAtTime(rightFreq, now);
     gainR.gain.setValueAtTime(0.001, now);
-    gainR.gain.exponentialRampToValueAtTime(0.5, now + 0.5);
+    gainR.gain.exponentialRampToValueAtTime(0.5, now + 0.4);
 
     // Stereo Panning
     const pannerL = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
@@ -347,7 +347,7 @@ export const Session: React.FC = () => {
         noiseSrc.loop = true;
         const noiseG = ctx.createGain();
         noiseG.gain.setValueAtTime(0.001, now);
-        noiseG.gain.exponentialRampToValueAtTime(noiseVolume, now + 0.5);
+        noiseG.gain.exponentialRampToValueAtTime(noiseVolume, now + 0.4);
         noiseSrc.connect(noiseG);
         noiseG.connect(gainMasterRef.current);
         noiseSrc.start();
@@ -367,15 +367,15 @@ export const Session: React.FC = () => {
 
     if (gainLeftRef.current) {
       gainLeftRef.current.gain.setValueAtTime(gainLeftRef.current.gain.value, now);
-      gainLeftRef.current.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+      gainLeftRef.current.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
     }
     if (gainRightRef.current) {
       gainRightRef.current.gain.setValueAtTime(gainRightRef.current.gain.value, now);
-      gainRightRef.current.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+      gainRightRef.current.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
     }
     if (noiseGainRef.current) {
       noiseGainRef.current.gain.setValueAtTime(noiseGainRef.current.gain.value, now);
-      noiseGainRef.current.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+      noiseGainRef.current.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
     }
 
     window.setTimeout(() => {
@@ -389,7 +389,7 @@ export const Session: React.FC = () => {
       oscLeftRef.current = null;
       oscRightRef.current = null;
       noiseSourceRef.current = null;
-    }, 350);
+    }, 300);
 
     logEvent('Carrier engine placed in standby.', 'info');
   };
@@ -397,13 +397,20 @@ export const Session: React.FC = () => {
   // Toggle Session
   const toggleSession = async () => {
     if (!isSessionActive) {
-      startAudioSynthesis();
+      await startAudioSynthesis();
       setIsSessionActive(true);
     } else {
       stopAudioSynthesis();
       setIsSessionActive(false);
     }
   };
+
+  // Clean up audio on component unmount
+  useEffect(() => {
+    return () => {
+      stopAudioSynthesis();
+    };
+  }, []);
 
   // Update Frequencies smoothly on slider change
   useEffect(() => {
@@ -424,13 +431,38 @@ export const Session: React.FC = () => {
     }
   }, [masterVolume, audioMuted]);
 
-  // Noise volume & type update
+  // Dynamic Noise Volume & Noise Type update
   useEffect(() => {
-    if (audioCtxRef.current && noiseGainRef.current) {
-      const now = audioCtxRef.current.currentTime;
-      noiseGainRef.current.gain.setTargetAtTime(noiseType === 'off' ? 0 : noiseVolume, now, 0.05);
+    if (!audioCtxRef.current || !isSessionActive) return;
+    const ctx = audioCtxRef.current;
+    const now = ctx.currentTime;
+
+    if (noiseType === 'off') {
+      if (noiseGainRef.current) {
+        noiseGainRef.current.gain.setTargetAtTime(0, now, 0.05);
+      }
+    } else {
+      // If noise source doesn't exist yet, spawn it
+      if (!noiseSourceRef.current && gainMasterRef.current) {
+        const buffer = createNoiseBuffer(noiseType);
+        if (buffer) {
+          const noiseSrc = ctx.createBufferSource();
+          noiseSrc.buffer = buffer;
+          noiseSrc.loop = true;
+          const noiseG = ctx.createGain();
+          noiseG.gain.setValueAtTime(0.001, now);
+          noiseG.gain.exponentialRampToValueAtTime(noiseVolume, now + 0.3);
+          noiseSrc.connect(noiseG);
+          noiseG.connect(gainMasterRef.current);
+          noiseSrc.start();
+          noiseSourceRef.current = noiseSrc;
+          noiseGainRef.current = noiseG;
+        }
+      } else if (noiseGainRef.current) {
+        noiseGainRef.current.gain.setTargetAtTime(noiseVolume, now, 0.05);
+      }
     }
-  }, [noiseVolume, noiseType]);
+  }, [noiseVolume, noiseType, isSessionActive]);
 
   // Apply Preset
   const applyPreset = (preset: FocusPreset) => {
