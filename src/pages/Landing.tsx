@@ -119,19 +119,24 @@ const Landing: React.FC = () => {
     >
       {/* Fixed minimal nav */}
       <nav
-        className="pointer-events-none fixed inset-x-0 top-0 z-50 transition-colors duration-700"
+        className="pointer-events-none fixed inset-x-0 top-0 z-50 transition-colors duration-700 safe-area-top"
         style={{ color: `hsl(${current.fg})` }}
       >
-        <div className="flex items-center justify-between px-6 py-6 sm:px-12">
-          <Link to="/" className="pointer-events-auto text-lg font-bold tracking-tight">
-            Project Sentinel
+        <div className="flex items-center justify-between px-4 py-4 sm:px-12 sm:py-6">
+          <Link to="/" className="pointer-events-auto flex items-center gap-2.5 text-lg font-bold tracking-tight">
+            <img 
+              src="/sentinel_logo.svg" 
+              alt="Project Sentinel" 
+              className="w-7 h-7 rounded-lg object-contain bg-black/40 p-0.5 border border-white/20"
+            />
+            <span className="font-['Syne',sans-serif]">Project Sentinel</span>
           </Link>
-          <div className="pointer-events-auto flex items-center gap-5 text-sm">
+          <div className="pointer-events-auto flex items-center gap-3 sm:gap-5 text-sm">
             {PANELS.slice(0, 4).map((p, i) => (
               <button
                 key={p.id}
                 onClick={() => goTo(i)}
-                className="hidden opacity-80 transition-opacity hover:opacity-100 sm:inline"
+                className="hidden opacity-80 transition-opacity hover:opacity-100 md:inline font-mono text-xs"
               >
                 {p.word.toLowerCase()}
                 <sup className="ml-0.5 font-mono text-[0.6em]">{i + 1}</sup>
@@ -139,10 +144,10 @@ const Landing: React.FC = () => {
             ))}
             <button
               onClick={enterSession}
-              className="rounded-full border px-4 py-1.5 text-sm font-semibold transition-transform duration-300 hover:scale-105"
+              className="rounded-full border px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-transform duration-300 hover:scale-105 active:scale-95 shadow-sm"
               style={{ borderColor: `hsl(${current.fg} / 0.5)` }}
             >
-              Enter session
+              Enter studio
             </button>
           </div>
         </div>
@@ -187,14 +192,14 @@ const Landing: React.FC = () => {
             {p.index} / 05
           </span>
 
-          <div className="flex max-w-6xl flex-col items-center text-center">
+          <div className="flex max-w-6xl flex-col items-center text-center px-2">
             <h1
-              className="font-display font-bold uppercase leading-[0.85] tracking-[-0.05em]"
-              style={{ fontSize: "clamp(3.5rem, 15vw, 14rem)", color: "inherit" }}
+              className="font-display font-bold uppercase leading-[0.88] tracking-[-0.04em] break-words"
+              style={{ fontSize: "clamp(2.75rem, 13vw, 11rem)", color: "inherit" }}
             >
               {p.word}
             </h1>
-            <p className="mt-8 max-w-xl font-sans text-base opacity-80 sm:text-lg">
+            <p className="mt-6 max-w-xl font-sans text-sm sm:text-base md:text-lg opacity-85 px-4">
               {p.caption}
             </p>
             {i === PANELS.length - 1 && (

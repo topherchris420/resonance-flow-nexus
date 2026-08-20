@@ -198,4 +198,76 @@
   .vertical-rail {
     writing-mode: vertical-rl;
   }
+
+  /* Glassmorphism & High-tech Instrument Surfaces */
+  .glass-panel {
+    background: rgba(10, 14, 23, 0.72);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-panel-glow {
+    background: rgba(10, 14, 23, 0.82);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    box-shadow: 0 0 35px -10px rgba(56, 189, 248, 0.25), 0 20px 50px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Tactile Custom Range Slider */
+  .slider-tactile {
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    height: 6px;
+    outline: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .slider-tactile::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #38bdf8;
+    cursor: pointer;
+    box-shadow: 0 0 12px #38bdf8;
+    border: 2px solid #ffffff;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .slider-tactile::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 18px #38bdf8;
+  }
+  .slider-tactile::-webkit-slider-thumb:active {
+    transform: scale(0.95);
+  }
+  .slider-tactile::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #38bdf8;
+    cursor: pointer;
+    box-shadow: 0 0 12px #38bdf8;
+    border: 2px solid #ffffff;
+  }
+
+  /* Safe Area Mobile Padding */
+  .safe-area-bottom {
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+  }
+  .safe-area-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  /* Micro grid background */
+  .bg-grid-subtle {
+    background-size: 32px 32px;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  }
 }
