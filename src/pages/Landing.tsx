@@ -1,292 +1,170 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Headphones, Activity, Waves, ArrowRight } from "lucide-react";
-import OnboardingMandalaPreview from "@/components/OnboardingMandalaPreview";
+import { Link } from "react-router-dom";
+import {
+  ArrowDown,
+  ArrowUpRight,
+  Headphones,
+  ShieldCheck,
+  Waves,
+} from "lucide-react";
+import ResonanceVisual from "@/components/studio/ResonanceVisual";
+import StudioHeader from "@/components/studio/StudioHeader";
+import { PRESETS } from "@/lib/studio/practice";
+import "@/studio.css";
 
-type Panel = {
-  id: string;
-  word: string;
-  caption: string;
-  index: string;
-  bg: string;
-  fg: string;
-};
-
-const PANELS: Panel[] = [
-  {
-    id: "resonate",
-    word: "RESONATE",
-    caption: "A cognitive readiness instrument for the human signal.",
-    index: "01",
-    bg: "var(--panel-1)",
-    fg: "var(--panel-1-fg)",
-  },
-  {
-    id: "sense",
-    word: "SENSE",
-    caption: "Microphone and heart-rate input become a live spectral portrait.",
-    index: "02",
-    bg: "var(--panel-2)",
-    fg: "var(--panel-2-fg)",
-  },
-  {
-    id: "modulate",
-    word: "MODULATE",
-    caption: "Binaural carriers track coherence through Focus 12, 15 and 21.",
-    index: "03",
-    bg: "var(--panel-3)",
-    fg: "var(--panel-3-fg)",
-  },
-  {
-    id: "reflect",
-    word: "REFLECT",
-    caption: "Cymatic geometry renders your state as living, watchable form.",
-    index: "04",
-    bg: "var(--panel-4)",
-    fg: "var(--panel-4-fg)",
-  },
-  {
-    id: "begin",
-    word: "BEGIN",
-    caption: "Headphones on. One breath. The canvas is listening.",
-    index: "05",
-    bg: "var(--panel-5)",
-    fg: "var(--panel-5-fg)",
-  },
-];
-
-const Landing: React.FC = () => {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-  const [leaving, setLeaving] = useState(false);
-  const [breathCycle, setBreathCycle] = useState(8);
-  const navigate = useNavigate();
-
-  const enterSession = () => {
-    if (leaving) return;
-    setLeaving(true);
-    window.setTimeout(() => navigate("/session"), 450);
-  };
-
-  const ONBOARDING = [
-    {
-      icon: Headphones,
-      title: "Put headphones on",
-      body: "Binaural carriers need stereo separation to work.",
-    },
-    {
-      icon: Activity,
-      title: "Share breath or pulse",
-      body: "Optional mic or heart-rate input sharpens the read.",
-    },
-    {
-      icon: Waves,
-      title: "Watch your signal form",
-      body: "Cymatic geometry moves with your coherence, live.",
-    },
-  ];
-
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const i = Number((entry.target as HTMLElement).dataset.index);
-            setActive(i);
-          }
-        });
-      },
-      { root, threshold: 0.6 }
-    );
-    root.querySelectorAll("[data-index]").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  const goTo = (i: number) => {
-    const el = rootRef.current?.querySelector(`[data-index="${i}"]`);
-    el?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const current = PANELS[active];
-
+export default function Landing() {
   return (
-    <div
-      ref={rootRef}
-      className="snap-root relative font-display"
-      style={{ scrollbarWidth: "none" }}
-    >
-      {/* Fixed minimal nav */}
-      <nav
-        className="pointer-events-none fixed inset-x-0 top-0 z-50 transition-colors duration-700 safe-area-top"
-        style={{ color: `hsl(${current.fg})` }}
-      >
-        <div className="flex items-center justify-between px-4 py-4 sm:px-12 sm:py-6">
-          <Link to="/" className="pointer-events-auto flex items-center gap-2.5 text-lg font-bold tracking-tight">
-            <img 
-              src="/sentinel_logo.svg" 
-              alt="Project Sentinel" 
-              className="w-7 h-7 rounded-lg object-contain bg-black/40 p-0.5 border border-white/20"
-            />
-            <span className="font-['Syne',sans-serif]">Project Sentinel</span>
-          </Link>
-          <div className="pointer-events-auto flex items-center gap-3 sm:gap-5 text-sm">
-            {PANELS.slice(0, 4).map((p, i) => (
-              <button
-                key={p.id}
-                onClick={() => goTo(i)}
-                className="hidden opacity-80 transition-opacity hover:opacity-100 md:inline font-mono text-xs"
-              >
-                {p.word.toLowerCase()}
-                <sup className="ml-0.5 font-mono text-[0.6em]">{i + 1}</sup>
-              </button>
-            ))}
-            <button
-              onClick={enterSession}
-              className="rounded-full border px-3.5 py-1.5 text-xs sm:text-sm font-semibold transition-transform duration-300 hover:scale-105 active:scale-95 shadow-sm"
-              style={{ borderColor: `hsl(${current.fg} / 0.5)` }}
-            >
-              Enter studio
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Side dot navigation */}
-      <div className="fixed right-6 top-1/2 z-50 hidden -translate-y-1/2 flex-col gap-3 sm:flex sm:right-12">
-        {PANELS.map((p, i) => (
-          <button
-            key={p.id}
-            aria-label={`Go to ${p.word}`}
-            onClick={() => goTo(i)}
-            className="h-2.5 w-2.5 rounded-full border transition-all duration-500"
-            style={{
-              borderColor: `hsl(${current.fg} / 0.7)`,
-              backgroundColor: i === active ? `hsl(${current.fg})` : "transparent",
-              transform: i === active ? "scale(1.4)" : "scale(1)",
-            }}
-          />
-        ))}
-      </div>
-
-      {PANELS.map((p, i) => (
-        <section
-          key={p.id}
-          data-index={i}
-          className="snap-panel relative flex h-screen w-full items-center justify-center overflow-hidden px-6"
-          style={{
-            height: "100dvh",
-            backgroundColor: `hsl(${p.bg})`,
-            color: `hsl(${p.fg})`,
-          }}
-        >
-          {/* Vertical rails */}
-          <span className="vertical-rail absolute left-6 top-1/2 -translate-y-1/2 text-xs uppercase tracking-[0.35em] opacity-70 sm:left-12">
-            {i === PANELS.length - 1 ? "Scroll up" : "Scroll down"}
-          </span>
-          <span className="vertical-rail absolute left-6 top-8 font-mono text-xs opacity-70 sm:hidden">
-            {p.index}
-          </span>
-          <span className="absolute bottom-8 left-6 font-mono text-xs opacity-70 sm:left-12">
-            {p.index} / 05
-          </span>
-
-          <div className="flex max-w-6xl flex-col items-center text-center px-2">
-            <h1
-              className="font-display font-bold uppercase leading-[0.88] tracking-[-0.04em] break-words"
-              style={{ fontSize: "clamp(2.75rem, 13vw, 11rem)", color: "inherit" }}
-            >
-              {p.word}
-            </h1>
-            <p className="mt-6 max-w-xl font-sans text-sm sm:text-base md:text-lg opacity-85 px-4">
-              {p.caption}
+    <div className="sentinel-app">
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      <StudioHeader />
+      <main id="main">
+        <section className="landing-hero">
+          <div className="hero-copy">
+            <p className="eyebrow">
+              <span className="status-dot" /> SOUND. BREATH. STILLNESS.
             </p>
-            {i === PANELS.length - 1 && (
-              <>
-                <div className="mt-10 flex flex-col items-center">
-                  <OnboardingMandalaPreview color={`hsl(${p.fg})`} cycleSeconds={breathCycle} />
-                  <div className="mt-6 w-full max-w-xs">
-                    <div className="flex items-baseline justify-between font-mono text-[0.65rem] uppercase tracking-[0.25em] opacity-70">
-                      <label htmlFor="breath-rate">Breath rate</label>
-                      <span>{breathCycle}s · {(60 / breathCycle).toFixed(1)} bpm</span>
-                    </div>
-                    <input
-                      id="breath-rate"
-                      type="range"
-                      min={4}
-                      max={16}
-                      step={1}
-                      value={breathCycle}
-                      onChange={(e) => setBreathCycle(Number(e.target.value))}
-                      aria-label="Breath cycle length in seconds"
-                      className="mt-3 h-1 w-full cursor-pointer appearance-none rounded-full outline-none"
+            <h1>
+              Less noise.
+              <br />
+              More <em>resonance.</em>
+            </h1>
+            <p className="hero-description">
+              A small ritual for a busy mind. Find your rhythm with immersive
+              sound, guided breathing, and geometry in motion.
+            </p>
+            <div className="hero-actions">
+              <Link to="/session" className="primary-action">
+                Find your frequency
+                <ArrowUpRight size={19} />
+              </Link>
+              <span>No account. Just a moment for you.</span>
+            </div>
+            <div className="hero-notes">
+              <span>
+                <Headphones size={15} /> Best with headphones
+              </span>
+              <span>
+                <ShieldCheck size={15} /> Private by design
+              </span>
+            </div>
+          </div>
+          <div className="hero-instrument">
+            <div className="instrument-label">
+              <span>RESONANCE STUDY / 001</span>
+              <span>LIVE GENERATIVE FORM</span>
+            </div>
+            <ResonanceVisual />
+            <div className="instrument-caption">
+              <span>
+                <i /> A little space to settle.
+              </span>
+              <span>136.1 Hz / 7.83 Hz</span>
+            </div>
+          </div>
+        </section>
+        <div className="landing-divider">
+          <span>YOUR ATTENTION IS WORTH A MOMENT.</span>
+          <a href="#practices">
+            Choose your practice <ArrowDown size={15} />
+          </a>
+        </div>
+        <section id="practices" className="practice-section">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">01 / SET AN INTENTION</p>
+              <h2>What do you need today?</h2>
+            </div>
+            <p>Start with a sound. Make it your own.</p>
+          </div>
+          <div className="practice-grid">
+            {PRESETS.slice(0, 3).map((preset, i) => (
+              <Link
+                className="practice-card"
+                key={preset.id}
+                to={`/session?preset=${preset.id}`}
+              >
+                <div className="card-top">
+                  <span>0{i + 1}</span>
+                  <ArrowUpRight size={20} />
+                </div>
+                <div className={`mini-wave wave-${i}`} aria-hidden="true">
+                  {Array.from({ length: 23 }, (_, n) => (
+                    <i
+                      key={n}
                       style={{
-                        accentColor: `hsl(${p.fg})`,
-                        backgroundColor: `hsl(${p.fg} / 0.25)`,
+                        height: `${10 + Math.sin(n * 0.65 + i) ** 2 * 44}px`,
                       }}
                     />
-                    <div className="mt-2 flex justify-between font-sans text-[0.7rem] opacity-55">
-                      <span>Quick</span>
-                      <span>Deep</span>
-                    </div>
-                  </div>
-                </div>
-                <ul className="mt-10 grid w-full max-w-3xl gap-3 text-left sm:grid-cols-3">
-                  {ONBOARDING.map((step, si) => (
-                    <li
-                      key={step.title}
-                      className="rounded-2xl border p-5 backdrop-blur-sm animate-fade-in"
-                      style={{
-                        borderColor: `hsl(${p.fg} / 0.25)`,
-                        backgroundColor: `hsl(${p.fg} / 0.06)`,
-                        animationDelay: `${si * 120}ms`,
-                        animationFillMode: "both",
-                      }}
-                    >
-                      <div className="flex items-center gap-2">
-                        <step.icon className="h-4 w-4" />
-                        <span className="font-mono text-[0.65rem] uppercase tracking-[0.25em] opacity-70">
-                          0{si + 1}
-                        </span>
-                      </div>
-                      <h2 className="mt-3 font-display text-lg font-semibold tracking-tight">
-                        {step.title}
-                      </h2>
-                      <p className="mt-1 font-sans text-sm opacity-75">{step.body}</p>
-                    </li>
                   ))}
-                </ul>
-                <button
-                  onClick={enterSession}
-                  className="group mt-10 inline-flex items-center gap-3 rounded-full px-10 py-4 font-sans text-base font-semibold transition-transform duration-300 hover:scale-105"
-                  style={{ backgroundColor: `hsl(${p.fg})`, color: `hsl(${p.bg})` }}
-                >
-                  Enter the session
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </button>
-                <p className="mt-4 font-sans text-xs opacity-60">
-                  Takes about 30 seconds to calibrate. No account needed.
-                </p>
-              </>
-            )}
+                </div>
+                <h3>{preset.name}</h3>
+                <p>{preset.intent}</p>
+                <div className="card-meta">
+                  <span>{preset.minutes} MIN PRACTICE</span>
+                  <span>{preset.beat} Hz BEAT</span>
+                </div>
+              </Link>
+            ))}
           </div>
-
-          <span className="absolute bottom-8 right-6 font-mono text-xs opacity-70 sm:right-12">
-            Vers3Dynamics
-          </span>
         </section>
-      ))}
-
-      {/* Transition veil */}
-      <div
-        aria-hidden
-        className={`pointer-events-none fixed inset-0 z-[60] bg-black transition-opacity duration-500 ${
-          leaving ? "opacity-100" : "opacity-0"
-        }`}
-      />
+        <section className="how-section">
+          <div>
+            <p className="eyebrow">02 / A SIMPLE RITUAL</p>
+            <h2>
+              Tune in.
+              <br />
+              Let everything else wait.
+            </h2>
+            <p>
+              There is no score to chase. No perfect state to reach. Just a
+              sound, a breath, and a little time.
+            </p>
+          </div>
+          <ol>
+            {[
+              [
+                "Make yourself comfortable",
+                "Put on stereo headphones and start with a low volume.",
+              ],
+              [
+                "Find a rhythm that feels good",
+                "Choose a breathing guide or simply breathe naturally.",
+              ],
+              [
+                "Leave with a moment to reflect",
+                "Review your practice time and keep a record on this device.",
+              ],
+            ].map(([title, text], i) => (
+              <li key={title}>
+                <span>0{i + 1}</span>
+                <div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+        <section className="quiet-note">
+          <Waves size={23} />
+          <p>
+            An experimental sound and breathing studio. Visuals follow your
+            settings; they do not measure your body or mental state. No
+            microphone or sensor access is needed.
+          </p>
+          <Link to="/session">
+            Step inside
+            <ArrowUpRight size={17} />
+          </Link>
+        </section>
+      </main>
+      <footer className="sentinel-footer">
+        <span>
+          PROJECT SENTINEL <small>BY VERS3DYNAMICS</small>
+        </span>
+        <span>Less noise. More presence.</span>
+      </footer>
     </div>
   );
-};
-
-export default Landing;
+}

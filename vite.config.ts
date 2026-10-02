@@ -50,13 +50,17 @@ export default defineConfig(() => ({
       manifest: {
         name: 'Project Sentinel',
         short_name: 'Sentinel',
-        description: 'Cognitive Readiness Training Platform',
-        theme_color: '#ffffff',
+        description: 'A private sound and breathing studio',
+        theme_color: '#111c18',
+        background_color: '#111c18',
+        display: 'standalone',
+        start_url: '/',
         icons: [
           {
-            src: 'favicon.ico',
-            sizes: '73x74',
-            type: 'image/png'
+            src: 'favicon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any'
           }
         ]
       }

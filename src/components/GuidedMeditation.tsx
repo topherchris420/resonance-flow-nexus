@@ -1,58 +1,26 @@
-import React, { useState, useRef } from 'react';
-
-const meditationTracks = [
-  {
-    title: 'Mantra for Inner Peace',
-    src: '/audio/medi.mp3',
-  },
-  {
-    title: 'Affirmations for Clarity',
-    src: '/audio/medi.mp3',
-  },
-  {
-    title: '20-Minute Guided SRV Session',
-    src: '/audio/medi.mp3',
-  },
-];
-
-const GuidedMeditation = () => {
-  const [selectedTrack, setSelectedTrack] = useState(meditationTracks[0]);
-  const audioRef = useRef<HTMLAudioElement>(null);
-
-  const handleTrackSelect = (track: typeof meditationTracks[0]) => {
-    setSelectedTrack(track);
-    if (audioRef.current) {
-      audioRef.current.src = track.src;
-      audioRef.current.play();
-    }
-  };
-
+import { useState } from "react";
+export default function GuidedMeditation() {
+  const [failed, setFailed] = useState(false);
   return (
-    <div className="bg-card text-card-foreground p-4 rounded-lg shadow-lg">
-      <h2 className="text-xl font-bold mb-4">Guided Meditations</h2>
-      <div className="mb-4">
-        <audio ref={audioRef} controls src={selectedTrack.src} className="w-full">
-          Your browser does not support the audio element.
-        </audio>
-      </div>
-      <div>
-        <h3 className="font-bold mb-2">Playlist</h3>
-        <ul>
-          {meditationTracks.map((track) => (
-            <li
-              key={track.src}
-              onClick={() => handleTrackSelect(track)}
-              className={`p-2 cursor-pointer rounded ${
-                selectedTrack.src === track.src ? 'bg-accent' : 'hover:bg-accent'
-              }`}
-            >
-              {track.title}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    <section className="lab-card">
+      <p className="eyebrow">01 / LISTEN</p>
+      <h2>Make a little space.</h2>
+      <p>
+        Settle in with the original meditation recording, or work in silence.
+      </p>
+      <audio
+        controls
+        preload="none"
+        src="/audio/medi.mp3"
+        aria-label="Meditation recording"
+        onError={() => setFailed(true)}
+      />
+      {failed && (
+        <p role="status">
+          The recording could not load. You can continue with the drawing
+          practice.
+        </p>
+      )}
+    </section>
   );
-};
-
-export default GuidedMeditation;
+}
